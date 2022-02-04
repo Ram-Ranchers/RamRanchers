@@ -10,8 +10,8 @@ public class Grid : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gridSizeX = gameObject.bounds.size.x;
-        gridSizeZ = gameObject.bounds.size.z;
+        //gridSizeX = gameObject.bounds.size.x;
+        //gridSizeZ = gameObject.bounds.size.z;
     }
 
     // Update is called once per frame
