@@ -18,6 +18,11 @@ namespace RTS
         {
             if (Input.GetMouseButtonDown(1))
             {
+                if (playerAgent == null)
+                {
+                    return;
+                }
+                
                 playerAgent.SetDestination(GetPointUnderCursor());
             }
         }

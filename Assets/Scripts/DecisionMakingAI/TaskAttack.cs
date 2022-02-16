@@ -9,10 +9,11 @@ namespace DecisionMakingAI
         private EnemyManager _enemyManager;
 
         private float _attackTime = 1f;
-        private float _attackCoumter = 0f;
+        private float _attackCounter = 0f;
         
         public TaskAttack(Transform transform)
         {
+            _lastTarget = transform;
         }
 
         public override NodeState Evaluate()
@@ -25,8 +26,8 @@ namespace DecisionMakingAI
                _lastTarget = target;
             }
 
-            _attackCoumter += Time.deltaTime;
-            if (_attackCoumter >= _attackTime)
+            _attackCounter += Time.deltaTime;
+            if (_attackCounter >= _attackTime)
             {
                bool enemyIsDead = _enemyManager.TakeHit();
                if (enemyIsDead)
@@ -35,7 +36,7 @@ namespace DecisionMakingAI
                }
                else
                {
-                   _attackCoumter = 0f;   
+                   _attackCounter = 0f;   
                }
             }
             

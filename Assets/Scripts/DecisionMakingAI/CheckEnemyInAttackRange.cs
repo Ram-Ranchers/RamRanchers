@@ -26,7 +26,7 @@ namespace DecisionMakingAI
                 state = NodeState.Success;
                 return state;
             }
-            
+
             state = NodeState.Failure;
             return state;
         }
