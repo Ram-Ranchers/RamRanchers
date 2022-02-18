@@ -4,43 +4,33 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
-    private Renderer lineRenderer;
+    [SerializeField] private float gridWidth = 1f;
+    [SerializeField] private float gridLength = 1f;
+    [SerializeField] private float gridHeight = 1f;
+    [SerializeField] private int scale = 2;
 
-    private float gridSizeX;
-    private float gridSizeZ;
-
-    [SerializeField] private float size = 10;
+    private Vector3 cells;
 
     // Start is called before the first frame update
     void Start()
     {
-        lineRenderer = gameObject.AddComponent<LineRenderer>();
-
-        gridSizeX = gameObject.transform.localScale.x / size;
-        gridSizeZ = gameObject.transform.localScale.z / size;
+        for(int i = 0; i < gridWidth; i++)
+        {
+            for(int j = 0; j < gridLength; j++)
+            {
+                for(int k = 0; k < gridHeight; k++)
+                {
+                    cells.x = i * scale;
+                    cells.y = k * scale;
+                    cells.z = j * scale;
+                }
+            }
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < gridSizeX; i++)
-        {
-            for (int j = 0; j < gridSizeZ; j++)
-            {
-                Vector3 pos0 = new Vector3(mSquare[i, j].getX(), zOffset, mSquare[i, j].getY());
-                Vector3 pos1 = new Vector3(mSquare[i, j].getXPlus(), zOffset, mSquare[i, j].getY());
-                Vector3 pos2 = new Vector3(mSquare[i, j].getXPlus(), zOffset, mSquare[i, j].getYPlus());
-                Vector3 pos3 = new Vector3(mSquare[i, j].getX(), zOffset, mSquare[i, j].getYPlus());
-
-                lineRenderer.SetWidth(10, 10);
-                lineRenderer.SetColors(Color.red, Color.red);
-
-                lineRenderer.SetPosition(0, pos0);
-                lineRenderer.SetPosition(1, pos1);
-                lineRenderer.SetPosition(2, pos2);
-                lineRenderer.SetPosition(3, pos3);
-                lineRenderer.SetPosition(4, pos0);
-            }
-        }
+        
     }
-}   
+}
