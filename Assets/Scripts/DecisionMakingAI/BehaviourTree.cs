@@ -19,6 +19,7 @@ namespace DecisionMakingAI
             }
         }
 
+        public Node Root => _root;
         protected abstract Node SetupTree();
     }
 }

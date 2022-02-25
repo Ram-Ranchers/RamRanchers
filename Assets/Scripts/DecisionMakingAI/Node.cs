@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditorInternal;
 
 namespace DecisionMakingAI
 {
@@ -12,36 +11,43 @@ namespace DecisionMakingAI
     public class Node
     {
         protected NodeState state;
+        public NodeState State => state;
 
-        public Node parent;
+        private Node _parent;
         protected List<Node> children = new List<Node>();
 
         private Dictionary<string, object> _dataContext = new Dictionary<string, object>(); 
 
         public Node()
         {
-            parent = null;
+            _parent = null;
         }
 
-        public Node(List<Node> children)
+        public Node(List<Node> children) : this()
         {
-            foreach (Node child in children)
-            {
-                Attach(child);
-            }
-        }
-
-        private void Attach(Node node)
-        {
-            node.parent = this;
-            children.Add(node);
+            SetChildren(children);
         }
 
         public virtual NodeState Evaluate() => NodeState.Failure;
 
-        public void SetData(string key, object value)
+        public void SetChildren(List<Node> children)
         {
-            _dataContext[key] = value;
+            foreach (Node c in children)
+            {
+                Attach(c);
+            }
+        }
+        
+        public void Attach(Node child)
+        {
+            children.Add(child);
+            child._parent = this;
+        }
+
+        public void Detach(Node child)
+        {
+            children.Remove(child);
+            child._parent = null;
         }
 
         public object GetData(string key)
@@ -52,7 +58,7 @@ namespace DecisionMakingAI
                 return value;
             }
 
-            Node node = parent;
+            Node node = _parent;
             while (node != null)
             {
                 value = node.GetData(key);
@@ -61,7 +67,7 @@ namespace DecisionMakingAI
                     return value;
                 }
 
-                node = node.parent;
+                node = node._parent;
             }
 
             return null;
@@ -75,7 +81,7 @@ namespace DecisionMakingAI
                 return true;
             }
 
-            Node node = parent;
+            Node node = _parent;
             while (node != null)
             {
                 bool cleared = node.ClearData(key);
@@ -84,10 +90,19 @@ namespace DecisionMakingAI
                     return true;
                 }
 
-                node = node.parent;
+                node = node._parent;
             }
 
             return false;
         }
+        
+        public void SetData(string key, object value)
+        {
+            _dataContext[key] = value;
+        }
+
+        public Node Parent => _parent;
+        public List<Node> Children => children;
+        public bool HasChildren => children.Count > 0;
     }
 }
