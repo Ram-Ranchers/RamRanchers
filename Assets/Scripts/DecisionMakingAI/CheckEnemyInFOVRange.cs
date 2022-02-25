@@ -22,7 +22,7 @@ namespace DecisionMakingAI
                     Physics.OverlapSphere(_transform.position, GuardBT.fovRange, _enemyLayerMask);
                 if (colliders.Length > 0)
                 {
-                    parent.parent.SetData("target", colliders[0].transform);
+                    _parent._parent.SetData("target", colliders[0].transform);
                     
                     state = NodeState.Success;
                     return state;

@@ -13,7 +13,7 @@ namespace DecisionMakingAI
         protected NodeState state;
         public NodeState State => state;
 
-        private Node _parent;
+        public Node _parent;
         protected List<Node> children = new List<Node>();
 
         private Dictionary<string, object> _dataContext = new Dictionary<string, object>(); 
