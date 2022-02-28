@@ -4,33 +4,40 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
-    private int width;
-    private int height;
-    private float cellSize;
-    private int[,] gridArray;
+    private float width;
+    private float height;
+    private float length;
+    [SerializeField] private float cellSize = 1f;
 
-    public Grid(int width, int height, float cellSize)
+    [SerializeField] private List<Vector3> cellPos;
+
+    private void Start()
     {
-        this.width = width;
-        this.height = height;
-        this.cellSize = cellSize;
+        width = gameObject.transform.lossyScale.x;
+        height = gameObject.transform.lossyScale.y;
+        length = gameObject.transform.lossyScale.z;
+        GenerateGrid();
+    }
 
-        gridArray = new int[width, height];
-
-        for(int i = 0; i < gridArray.GetLength(0); i++)
+    private void GenerateGrid()
+    {
+        for(int x = 0; x < width; x++)
         {
-            for(int j = 0; j < gridArray.GetLength(1); j++)
+            for(int z = 0; z < length; z++)
             {
-                Debug.Log(i + ", " + j);
+                for(int y = 0; y < height; y++)
+                {
+                    cellPos.Add(new Vector3(x * cellSize, y * cellSize, z * cellSize));
+                }
             }
         }
     }
 
-        // https://www.youtube.com/watch?v=waEsGu--9P8&t=0s
-        //[SerializeField] private float gridWidth = 1f;
-        //[SerializeField] private float gridLength = 1f;
-        //[SerializeField] private float gridHeight = 1f;
-        //[SerializeField] private int scale = 2;
+    // https://www.youtube.com/watch?v=waEsGu--9P8&t=0s
+    //[SerializeField] private float gridWidth = 1f;
+    //[SerializeField] private float gridLength = 1f;
+    //[SerializeField] private float gridHeight = 1f;
+    //[SerializeField] private int scale = 2;
 
     //private List<Vector3> cells;
 
