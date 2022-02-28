@@ -10,6 +10,21 @@ namespace DecisionMakingAI
 
         private float _attackTime = 1f;
         private float _attackCounter = 0f;
+
+       //private UnitManager _manager;
+
+       //public TaskAttack(UnitManager manager) : base()
+       //{
+       //    _manager = manager;
+       //}
+       //
+       //public override NodeState Evaluate()
+       //{
+       //    object currentTarget = GetData("currentTarget");
+       //    _manager.Attack((Transform) currentTarget);
+       //    state = NodeState.Success;
+       //    return state;
+       //}
         
         public TaskAttack(Transform transform)
         {
