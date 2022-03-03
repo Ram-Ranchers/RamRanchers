@@ -6,7 +6,8 @@ namespace DecisionMakingAI
         
         public static BuildingData[] Building_Data = new BuildingData[]
         {
-            new BuildingData("Building", 100)
+            new BuildingData("House", 100),
+            new BuildingData("Tower", 50)
         };
     }
 }

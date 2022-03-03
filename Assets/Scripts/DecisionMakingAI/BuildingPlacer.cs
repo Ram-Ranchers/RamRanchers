@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace DecisionMakingAI
 {
@@ -9,11 +10,6 @@ namespace DecisionMakingAI
         private Ray _ray;
         private RaycastHit _raycastHit;
         private Vector3 _lastPlacementPosition;
-        
-        private void Start()
-        {
-            PreparePlacedBuilding(0);
-        }
 
         private void Update()
         {
@@ -37,7 +33,7 @@ namespace DecisionMakingAI
                     _lastPlacementPosition = _raycastHit.point;
                 }
 
-                if (_placedBuilding.HasValidPlacement && Input.GetMouseButtonDown(0))
+                if (_placedBuilding.HasValidPlacement && Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
                 {
                     PlaceBuilding();
                 }
@@ -57,6 +53,11 @@ namespace DecisionMakingAI
             _lastPlacementPosition = Vector3.zero;
         }
 
+        public void SelectPlacedBuilding(int buildingDataIndex)
+        {
+            PreparePlacedBuilding(buildingDataIndex);
+        }
+        
         void PlaceBuilding()
         {
             _placedBuilding.Place();
