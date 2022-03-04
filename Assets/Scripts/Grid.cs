@@ -4,18 +4,29 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
+    struct cell
+    {
+        private float xPos;
+        private float yPos;
+        private float zPos;
+        private bool isWalkable = true;
+
+        [SerializeField] private float cellSize = 1f;
+    }
+
     private float width;
     private float height;
     private float length;
-    [SerializeField] private float cellSize = 1f;
 
-    [SerializeField] private List<Vector3> cellPos;
+    [SerializeField] private cell[] cells;
+
+   // [SerializeField] private List<Vector3> cellPos;
 
     private void Start()
     {
-        width = gameObject.transform.lossyScale.x;
-        height = gameObject.transform.lossyScale.y;
-        length = gameObject.transform.lossyScale.z;
+        width = gameObject.GetComponent<Renderer>().bounds.size.x;
+        height = gameObject.GetComponent<Renderer>().bounds.size.y;
+        length = gameObject.GetComponent<Renderer>().bounds.size.z;
         GenerateGrid();
     }
 
@@ -32,6 +43,4 @@ public class Grid : MonoBehaviour
             }
         }
     }
-
-    
 }
