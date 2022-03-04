@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 namespace DecisionMakingAI
 {
@@ -9,25 +10,66 @@ namespace DecisionMakingAI
         
         public Transform buildingMenu;
         public GameObject buildingButtonPrefab;
+        public Transform resourcesUIParent;
+        public GameObject gameResourcesDisplayPrefab;
+
+        private Dictionary<string, Text> _resourceTexts;
+        private Dictionary<string, Button> _buildingButtons;
 
         private void Awake()
         {
+            _resourceTexts = new Dictionary<string, Text>();
+            foreach (KeyValuePair<string, GameResource> pair in Globals.Game_Resources)
+            {
+                GameObject display = Instantiate(gameResourcesDisplayPrefab, resourcesUIParent);
+                display.name = pair.Key;
+                _resourceTexts[pair.Key] = display.transform.Find("Text").GetComponent<Text>();
+                SetResourceText(pair.Key, pair.Value.Amount);
+            }
+
+            _buildingButtons = new Dictionary<string, Button>();
             _buildingPlacer = GetComponent<BuildingPlacer>();
 
             for (int i = 0; i < Globals.Building_Data.Length; i++)
             {
-                GameObject button = GameObject.Instantiate(buildingButtonPrefab, buildingMenu);
+                GameObject button = Instantiate(buildingButtonPrefab, buildingMenu);
                 string code = Globals.Building_Data[i].Code;
                 button.name = code;
                 button.transform.Find("Text").GetComponent<Text>().text = code;
                 Button b = button.GetComponent<Button>();
+                _buildingButtons[code] = b;
+                if (!Globals.Building_Data[i].CanBuy())
+                {
+                    b.interactable = false;
+                }
                 AddBuildingButtonListener(b, i);
             }
         }
 
+        private void SetResourceText(string resource, int value)
+        {
+            _resourceTexts[resource].text = value.ToString();
+        }
+
+        public void UpdateResourceTexts()
+        {
+            foreach (KeyValuePair<string, GameResource> pair in Globals.Game_Resources)
+            {
+                SetResourceText(pair.Key, pair.Value.Amount);
+            }
+        }
+        
         private void AddBuildingButtonListener(Button b, int i)
         {
             b.onClick.AddListener(() => _buildingPlacer.SelectPlacedBuilding(i));
+        }
+
+        public void CheckBuildingButtons()
+        {
+            foreach (BuildingData data in Globals.Building_Data)
+            {
+                _buildingButtons[data.Code].interactable = data.CanBuy();
+            }
         }
         
         //[Header("Unit Selection")] 

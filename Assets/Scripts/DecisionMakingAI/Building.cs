@@ -83,8 +83,18 @@ namespace DecisionMakingAI
             SetMaterials();
             
             _transform.GetComponent<BoxCollider>().isTrigger = false;
+
+            foreach (KeyValuePair<string, int> pair in _date.Cost)
+            {
+                Globals.Game_Resources[pair.Key].AddAmount(-pair.Value);
+            }
         }
 
+        public bool CanBuy()
+        {
+            return _date.CanBuy();
+        }
+        
         public void CheckValidPlacement()
         {
             if (_placement == BuildingPlacement.Fixed)

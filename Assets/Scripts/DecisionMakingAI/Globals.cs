@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace DecisionMakingAI
 {
     public class Globals
@@ -6,8 +8,26 @@ namespace DecisionMakingAI
         
         public static BuildingData[] Building_Data = new BuildingData[]
         {
-            new BuildingData("House", 100),
-            new BuildingData("Tower", 50)
+            new BuildingData("House", 100, new Dictionary<string, int>()
+            {
+                {"gold", 100},
+                {"wood", 120},
+            }),
+            
+            new BuildingData("Tower", 50, new Dictionary<string, int>()
+            {
+                {"gold", 80},
+                {"wood", 80},
+                {"stone", 100}
+            })
         };
+
+        public static Dictionary<string, GameResource> Game_Resources =
+            new Dictionary<string, GameResource>()
+            {
+                { "gold", new GameResource("Gold", 300) },
+                { "wood", new GameResource("Wood", 300) },
+                { "stone", new GameResource("Stone", 300) }
+            };
     }
 }

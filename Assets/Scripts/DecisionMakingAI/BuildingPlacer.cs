@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -6,10 +7,16 @@ namespace DecisionMakingAI
     public class BuildingPlacer : MonoBehaviour
     {
         private Building _placedBuilding = null;
-
+        private UiManager _uiManager;
+        
         private Ray _ray;
         private RaycastHit _raycastHit;
         private Vector3 _lastPlacementPosition;
+
+        private void Awake()
+        {
+            _uiManager = GetComponent<UiManager>();
+        }
 
         private void Update()
         {
@@ -61,8 +68,16 @@ namespace DecisionMakingAI
         void PlaceBuilding()
         {
             _placedBuilding.Place();
-            
-            PreparePlacedBuilding(_placedBuilding.DataIndex);
+            if (_placedBuilding.CanBuy())
+            {
+                PreparePlacedBuilding(_placedBuilding.DataIndex);
+            }
+            else
+            {
+                _placedBuilding = null;
+            }
+            _uiManager.UpdateResourceTexts();
+            _uiManager.CheckBuildingButtons();
         }
         
         void CancelPlaceBuilding()
