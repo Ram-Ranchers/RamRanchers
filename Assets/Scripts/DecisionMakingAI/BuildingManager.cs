@@ -3,13 +3,18 @@ using UnityEngine;
 namespace DecisionMakingAI
 {
     [RequireComponent(typeof(BoxCollider))]
-    public class BuildingManager : MonoBehaviour
+    public class BuildingManager : UnitManager
     {
         private BoxCollider _collider;
 
         private Building _building = null;
         private int _nCollisions = 0;
 
+        protected override bool IsActive()
+        {
+            return _building.IsFixed;
+        }
+        
         public void Initialise(Building building)
         {
             _collider = GetComponent<BoxCollider>();

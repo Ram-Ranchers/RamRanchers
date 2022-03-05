@@ -29,5 +29,7 @@ namespace DecisionMakingAI
                 { "wood", new GameResource("Wood", 300) },
                 { "stone", new GameResource("Stone", 300) }
             };
+
+        public static List<UnitManager> Selected_Units = new List<UnitManager>();
     }
 }
