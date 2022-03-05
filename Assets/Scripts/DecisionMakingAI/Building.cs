@@ -22,10 +22,12 @@ namespace DecisionMakingAI
         public Building(BuildingData data)
         {
             _date = data;
-            _currentHealth = data.HP;
+            _currentHealth = data.healthpoints;
 
-            GameObject g = GameObject.Instantiate(Resources.Load($"Prefabs/Buildings/{_date.Code}")) as GameObject;
+            GameObject g = GameObject.Instantiate(data.prefab) as GameObject;
             _transform = g.transform;
+
+            _buildingManager = _transform.GetComponent<BuildingManager>();
             
             _materials = new List<Material>();
             foreach (Material material in _transform.Find("Mesh").GetComponent<Renderer>().materials)
@@ -33,7 +35,6 @@ namespace DecisionMakingAI
                 _materials.Add(new Material(material));
             }
             
-            _buildingManager = g.GetComponent<BuildingManager>();
             _placement = BuildingPlacement.Valid;
             SetMaterials();
         }
@@ -84,9 +85,9 @@ namespace DecisionMakingAI
             
             _transform.GetComponent<BoxCollider>().isTrigger = false;
 
-            foreach (KeyValuePair<string, int> pair in _date.Cost)
+            foreach (ResourceValue resource in _date.cost)
             {
-                Globals.Game_Resources[pair.Key].AddAmount(-pair.Value);
+                Globals.Game_Resources[resource.code].AddAmount(-resource.amount);
             }
         }
 
@@ -110,10 +111,11 @@ namespace DecisionMakingAI
             _transform.position = position;
         }
 
-        public string Code => _date.Code;
+        public string Code => _date.code;
         public Transform Transform => _transform;
         public int HP { get => _currentHealth; set => _currentHealth = value; }
-        public int MaxHp => _date.HP;
+        public int MaxHp => _date.healthpoints;
+        public string Description => _date.description;
         public bool IsFixed => _placement == BuildingPlacement.Fixed;
         public bool HasValidPlacement => _placement == BuildingPlacement.Valid;
         public int DataIndex
@@ -122,7 +124,7 @@ namespace DecisionMakingAI
             {
                 for (int i = 0; i < Globals.Building_Data.Length; i++)
                 {
-                    if (Globals.Building_Data[i].Code == _date.Code)
+                    if (Globals.Building_Data[i].code == _date.code)
                     {
                         return i;
                     }

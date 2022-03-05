@@ -1,10 +1,16 @@
+using System;
 using UnityEngine;
 
 namespace DecisionMakingAI
 {
     public class GameManager : MonoBehaviour
     {
-        public float producingRate = 3f;
+        private void Awake()
+        {
+            DataHandler.LoadGameData();
+        }
+
+        //public float producingRate = 3f;
 
        //public void Start()
        //{

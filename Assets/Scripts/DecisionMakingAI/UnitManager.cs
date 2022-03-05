@@ -8,6 +8,14 @@ namespace DecisionMakingAI
     {
         public GameObject selectionCircle;
 
+        private Transform _canvas;
+        private GameObject _healthbar;
+
+        private void Awake()
+        {
+            _canvas = GameObject.Find("Canvas").transform;
+        }
+
         protected virtual bool IsActive()
         {
             return true;
@@ -29,6 +37,17 @@ namespace DecisionMakingAI
             }
             Globals.Selected_Units.Add(this);
             selectionCircle.SetActive(true);
+
+            if (_healthbar == null)
+            {
+                _healthbar = GameObject.Instantiate(Resources.Load("Prefabs/UI/Healthbar")) as GameObject;
+                _healthbar.transform.SetParent(_canvas);
+                Healthbar h = _healthbar.GetComponent<Healthbar>();
+                Rect boundingBox = Utils.GetBoundingBoxOnScreen(transform.Find("Mesh").GetComponent<Renderer>().bounds,
+                    Camera.main);
+                h.Initialise(transform, boundingBox.height);
+                h.SetPosition();
+            }
         }
         
         public void Select()
@@ -77,6 +96,8 @@ namespace DecisionMakingAI
 
             Globals.Selected_Units.Remove(this);
             selectionCircle.SetActive(false);
+            Destroy(_healthbar);
+            _healthbar = null;
         }
         
         //private bool _selected = false;

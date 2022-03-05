@@ -13,7 +13,13 @@ namespace DecisionMakingAI
         public GameObject buildingButtonPrefab;
         public Transform resourcesUIParent;
         public GameObject gameResourcesDisplayPrefab;
-
+        public GameObject gameResourceCostPrefab;
+        public GameObject infoPanel;
+        public Color invalidTextColour;
+        
+        private Text _infoPanelTitleText;
+        private Text _infoPanelDescriptionText;
+        private Transform _infoPanelResourcesCostParent;
         private Dictionary<string, Text> _resourceTexts;
         private Dictionary<string, Button> _buildingButtons;
 
@@ -33,18 +39,26 @@ namespace DecisionMakingAI
 
             for (int i = 0; i < Globals.Building_Data.Length; i++)
             {
+                BuildingData data = Globals.Building_Data[i];
                 GameObject button = Instantiate(buildingButtonPrefab, buildingMenu);
-                string code = Globals.Building_Data[i].Code;
-                button.name = code;
-                button.transform.Find("Text").GetComponent<Text>().text = code;
+                button.name = data.unitname;
+                button.transform.Find("Text").GetComponent<Text>().text = data.unitname;
                 Button b = button.GetComponent<Button>();
-                _buildingButtons[code] = b;
+                _buildingButtons[data.code] = b;
+                AddBuildingButtonListener(b, i);
+                button.GetComponent<BuildingButton>().Initialise(Globals.Building_Data[i]);
+                
                 if (!Globals.Building_Data[i].CanBuy())
                 {
                     b.interactable = false;
                 }
-                AddBuildingButtonListener(b, i);
             }
+
+            Transform infoPanelTransfrom = infoPanel.transform;
+            _infoPanelTitleText = infoPanelTransfrom.Find("Content/Title").GetComponent<Text>();
+            _infoPanelDescriptionText = infoPanelTransfrom.Find("Content/Description").GetComponent<Text>();
+            _infoPanelResourcesCostParent = infoPanelTransfrom.Find("Content/ResourcesCost");
+            ShowInfoPanel(false);
         }
 
         private void SetResourceText(string resource, int value)
@@ -69,7 +83,7 @@ namespace DecisionMakingAI
         {
             foreach (BuildingData data in Globals.Building_Data)
             {
-                _buildingButtons[data.Code].interactable = data.CanBuy();
+                _buildingButtons[data.code].interactable = data.CanBuy();
             }
         }
 
@@ -77,14 +91,71 @@ namespace DecisionMakingAI
         {
             EventManager.AddListener("UpdateResourceTexts", OnUpdateResourceTexts);
             EventManager.AddListener("CheckBuildingButtons", OnCheckBuildingButtons);
+            EventManager.AddTypedListener("HoverBuildingButton", OnHoverBuildingButton);
+            EventManager.AddListener("UnhoverBuildingButton", OnUnhoverBuildingButton);
         }
 
         private void OnDisable()
         {
             EventManager.RemoveListener("UpdateResourceTexts", OnUpdateResourceTexts);
             EventManager.RemoveListener("CheckBuildingButtons", OnCheckBuildingButtons);
+            EventManager.RemoveTypedListener("HoverBuildingButton", OnHoverBuildingButton);
+            EventManager.RemoveListener("UnhoverBuildingButton", OnUnhoverBuildingButton);
         }
 
+        private void OnHoverBuildingButton(CustomEventData data)
+        {
+            SetInfoPanel(data.buildingData);
+            ShowInfoPanel(true);
+        }
+
+        private void OnUnhoverBuildingButton()
+        {
+            ShowInfoPanel(false);
+        }
+
+        public void SetInfoPanel(BuildingData data)
+        {
+            // Update texts
+            if (data.code != "")
+            {
+                _infoPanelTitleText.text = data.code;
+            }
+
+            if (data.description != "")
+            {
+                _infoPanelDescriptionText.text = data.description;
+            }
+            
+            // Clear resource costs and reinstantiate new ones
+            foreach (Transform child in _infoPanelResourcesCostParent)
+            {
+                Destroy(child.gameObject);
+            }
+
+            if (data.cost.Count > 0)
+            {
+                GameObject g; Transform t;
+                foreach (ResourceValue resource in data.cost)
+                {
+                    g = GameObject.Instantiate(gameResourceCostPrefab, _infoPanelResourcesCostParent);
+                    t = g.transform;
+                    t.Find("Text").GetComponent<Text>().text = resource.amount.ToString();
+                    t.Find("Icon").GetComponent<Image>().sprite =
+                        Resources.Load<Sprite>($"Textures/GameResources/{resource.code}");
+                    if (Globals.Game_Resources[resource.code].Amount < resource.amount)
+                    {
+                        t.Find("Text").GetComponent<Text>().color = invalidTextColour;
+                    }
+                }
+            }
+        }
+
+        public void ShowInfoPanel(bool show)
+        {
+            infoPanel.SetActive(show);
+        }
+        
         //[Header("Unit Selection")] 
         //public GameObject selecteUnitMenuUpgradeButton;
         //public GameObject selecteUnitMenuDestroyButton;
