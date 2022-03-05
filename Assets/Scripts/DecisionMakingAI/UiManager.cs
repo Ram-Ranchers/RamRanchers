@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
@@ -51,7 +52,7 @@ namespace DecisionMakingAI
             _resourceTexts[resource].text = value.ToString();
         }
 
-        public void UpdateResourceTexts()
+        public void OnUpdateResourceTexts()
         {
             foreach (KeyValuePair<string, GameResource> pair in Globals.Game_Resources)
             {
@@ -64,14 +65,26 @@ namespace DecisionMakingAI
             b.onClick.AddListener(() => _buildingPlacer.SelectPlacedBuilding(i));
         }
 
-        public void CheckBuildingButtons()
+        public void OnCheckBuildingButtons()
         {
             foreach (BuildingData data in Globals.Building_Data)
             {
                 _buildingButtons[data.Code].interactable = data.CanBuy();
             }
         }
-        
+
+        private void OnEnable()
+        {
+            EventManager.AddListener("UpdateResourceTexts", OnUpdateResourceTexts);
+            EventManager.AddListener("CheckBuildingButtons", OnCheckBuildingButtons);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.RemoveListener("UpdateResourceTexts", OnUpdateResourceTexts);
+            EventManager.RemoveListener("CheckBuildingButtons", OnCheckBuildingButtons);
+        }
+
         //[Header("Unit Selection")] 
         //public GameObject selecteUnitMenuUpgradeButton;
         //public GameObject selecteUnitMenuDestroyButton;
