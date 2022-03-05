@@ -5,11 +5,15 @@ namespace DecisionMakingAI
     [RequireComponent(typeof(BoxCollider))]
     public class BuildingManager : UnitManager
     {
-        private BoxCollider _collider;
-
         private Building _building = null;
         private int _nCollisions = 0;
 
+        protected override Unit Unit
+        {
+            get { return _building; }
+            set { _building = value is Building ? (Building)value : null; }
+        }
+        
         protected override bool IsActive()
         {
             return _building.IsFixed;

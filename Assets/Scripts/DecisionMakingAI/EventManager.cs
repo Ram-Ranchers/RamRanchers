@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -39,7 +38,7 @@ namespace DecisionMakingAI
             if (_events == null)
             {
                 _events = new Dictionary<string, UnityEvent>();
-                _typedEvents = new FlexibleDictionary<string, CustomEvent>();
+                _typedEvents = new Dictionary<string, CustomEvent>();
             }
         }
 
@@ -122,11 +121,11 @@ namespace DecisionMakingAI
 
     public class CustomEventData
     {
-        public BuildingData buildingData;
+        public UnitData unitData;
 
-        public CustomEventData(BuildingData buildingData)
+        public CustomEventData(UnitData unitData)
         {
-            this.buildingData = buildingData;
+            this.unitData = unitData;
         }
     }
     

@@ -10,25 +10,20 @@ namespace DecisionMakingAI
         Fixed
     }
     
-    public class Building
+    public class Building : Unit
     {
-        private BuildingData _date;
-        private Transform _transform;
-        private int _currentHealth;
         private BuildingPlacement _placement;
         private List<Material> _materials;
         private BuildingManager _buildingManager;
-        
-        public Building(BuildingData data)
+
+        public Building(BuildingData data) : this(data, new List<ResourceValue>() { })
         {
-            _date = data;
-            _currentHealth = data.healthpoints;
+        }
 
-            GameObject g = GameObject.Instantiate(data.prefab) as GameObject;
-            _transform = g.transform;
 
+        public Building(BuildingData data, List<ResourceValue> production) : base(data, production)
+        {
             _buildingManager = _transform.GetComponent<BuildingManager>();
-            
             _materials = new List<Material>();
             foreach (Material material in _transform.Find("Mesh").GetComponent<Renderer>().materials)
             {
@@ -77,23 +72,11 @@ namespace DecisionMakingAI
             _transform.Find("Mesh").GetComponent<Renderer>().materials = materials.ToArray();
         }
         
-        public void Place()
+        public override void Place()
         {
+            base.Place();
             _placement = BuildingPlacement.Fixed;
-
             SetMaterials();
-            
-            _transform.GetComponent<BoxCollider>().isTrigger = false;
-
-            foreach (ResourceValue resource in _date.cost)
-            {
-                Globals.Game_Resources[resource.code].AddAmount(-resource.amount);
-            }
-        }
-
-        public bool CanBuy()
-        {
-            return _date.CanBuy();
         }
         
         public void CheckValidPlacement()
@@ -105,17 +88,7 @@ namespace DecisionMakingAI
 
             _placement = _buildingManager.CheckPlacement() ? BuildingPlacement.Valid : BuildingPlacement.Invalid;
         }
-        
-        public void SetPosition(Vector3 position)
-        {
-            _transform.position = position;
-        }
 
-        public string Code => _date.code;
-        public Transform Transform => _transform;
-        public int HP { get => _currentHealth; set => _currentHealth = value; }
-        public int MaxHp => _date.healthpoints;
-        public string Description => _date.description;
         public bool IsFixed => _placement == BuildingPlacement.Fixed;
         public bool HasValidPlacement => _placement == BuildingPlacement.Valid;
         public int DataIndex
@@ -124,7 +97,7 @@ namespace DecisionMakingAI
             {
                 for (int i = 0; i < Globals.Building_Data.Length; i++)
                 {
-                    if (Globals.Building_Data[i].code == _date.code)
+                    if (Globals.Building_Data[i].code == _data.code)
                     {
                         return i;
                     }

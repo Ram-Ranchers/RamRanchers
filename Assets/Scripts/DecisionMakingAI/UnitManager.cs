@@ -11,6 +11,9 @@ namespace DecisionMakingAI
         private Transform _canvas;
         private GameObject _healthbar;
 
+        protected BoxCollider _collider;
+        protected virtual Unit Unit { get; set; }
+
         private void Awake()
         {
             _canvas = GameObject.Find("Canvas").transform;
@@ -98,6 +101,12 @@ namespace DecisionMakingAI
             selectionCircle.SetActive(false);
             Destroy(_healthbar);
             _healthbar = null;
+        }
+
+        public void Initialise(Unit unit)
+        {
+            _collider = GetComponent<BoxCollider>();
+            Unit = unit;
         }
         
         //private bool _selected = false;

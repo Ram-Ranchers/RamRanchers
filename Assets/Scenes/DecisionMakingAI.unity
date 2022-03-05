@@ -336,6 +336,9 @@ MonoBehaviour:
   buildingButtonPrefab: {fileID: 7886980576607791954, guid: e7fd07a44494a5548860dd56c0812f3a, type: 3}
   resourcesUIParent: {fileID: 385622689}
   gameResourcesDisplayPrefab: {fileID: 6458185243449244398, guid: c5094c0a965c53c4d8a7e977ae68ecd1, type: 3}
+  gameResourceCostPrefab: {fileID: 8336616519495389663, guid: ba4c701ed2efcfe42aaa720bffc5e2b9, type: 3}
+  infoPanel: {fileID: 1461282920}
+  invalidTextColour: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &191921335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1377,7 +1380,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1461282921
 RectTransform:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20a872dfd30fff046a1a9e5c0c101717, type: 3}
+  m_Script: {fileID: 11500000, guid: 50faf04feeb5e034eadbea4b0f71a780, type: 3}
   m_Name: Tower
   m_EditorClassIdentifier: 
   code: tower

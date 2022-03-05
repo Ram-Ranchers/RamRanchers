@@ -105,7 +105,7 @@ namespace DecisionMakingAI
 
         private void OnHoverBuildingButton(CustomEventData data)
         {
-            SetInfoPanel(data.buildingData);
+            SetInfoPanel(data.unitData);
             ShowInfoPanel(true);
         }
 
@@ -114,7 +114,7 @@ namespace DecisionMakingAI
             ShowInfoPanel(false);
         }
 
-        public void SetInfoPanel(BuildingData data)
+        public void SetInfoPanel(UnitData data)
         {
             // Update texts
             if (data.code != "")
