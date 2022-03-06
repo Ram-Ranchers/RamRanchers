@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace DecisionMakingAI
 {
@@ -15,6 +16,11 @@ namespace DecisionMakingAI
         
         private void Update()
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+            
             if (Globals.Selected_Units.Count > 0)
             {
                 if (Input.GetKeyDown(KeyCode.Escape))

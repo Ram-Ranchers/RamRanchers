@@ -12,7 +12,8 @@ namespace DecisionMakingAI
         public int healthpoints;
         public GameObject prefab;
         public List<ResourceValue> cost;
-        
+        public List<SkillData> skills = new List<SkillData>();
+            
         public bool CanBuy()
         {
             foreach (ResourceValue resource in cost)

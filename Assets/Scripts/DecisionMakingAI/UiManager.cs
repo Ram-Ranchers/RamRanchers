@@ -19,6 +19,7 @@ namespace DecisionMakingAI
         public GameObject selectedUnitDisplayPrefab;
         public Transform selectionGroupsParent;
         public GameObject selectedUnitMenu;
+        public GameObject unitSkillButtonPrefab;
         
         private Text _infoPanelTitleText;
         private Text _infoPanelDescriptionText;
@@ -31,6 +32,7 @@ namespace DecisionMakingAI
         private Text _selectedUnitLevelText;
         private Transform _selectedUnitResourcesProductionParent;
         private Transform _selectedUnitActionButtonsParent;
+        private Unit _selectedUnit;
 
         private void Awake()
         {
@@ -187,8 +189,37 @@ namespace DecisionMakingAI
                         Resources.Load<Sprite>($"Textures/GameResources/{resource.code}");
                 }
             }
+
+            _selectedUnit = unit;
+            
+            // Clear skills and reinstantiate new ones
+            foreach (Transform child in _selectedUnitActionButtonsParent)
+            {
+                Destroy(child.gameObject);
+            }
+
+            if (unit.SkillManagers.Count > 0)
+            {
+                GameObject g;
+                Transform t;
+                Button b;
+                for (int i = 0; i < unit.SkillManagers.Count; i++)
+                {
+                    g = GameObject.Instantiate(unitSkillButtonPrefab, _selectedUnitActionButtonsParent);
+                    t = g.transform;
+                    b = g.GetComponent<Button>();
+                    unit.SkillManagers[i].SetButton(b);
+                    t.Find("Text").GetComponent<Text>().text = unit.SkillManagers[i].skill.skillName;
+                    AddUnitSkillButtonListener(b, i);
+                }
+            }
         }
 
+        private void AddUnitSkillButtonListener(Button b, int i)
+        {
+            b.onClick.AddListener(() => _selectedUnit.TriggerSkill(i));
+        }
+        
         private void ShowSelectedUnitMenu(bool show)
         {
             selectedUnitMenu.SetActive(show);

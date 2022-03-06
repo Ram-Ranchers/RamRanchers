@@ -11,6 +11,7 @@ namespace DecisionMakingAI
         protected string _uid;
         protected int _level;
         protected List<ResourceValue> _production;
+        protected List<SkillManager> _skillManagers;
 
         public Unit(UnitData data) : this(data, new List<ResourceValue>() {})
         {
@@ -27,8 +28,22 @@ namespace DecisionMakingAI
             
             GameObject g = GameObject.Instantiate(data.prefab) as GameObject;
             _transform = g.transform;
+
+            _skillManagers = new List<SkillManager>();
+            SkillManager sm;
+            foreach (SkillData skill in _data.skills)
+            {
+                sm = g.AddComponent<SkillManager>();
+                sm.Initialise(skill, g);
+                _skillManagers.Add(sm);
+            }
         }
 
+        public void TriggerSkill(int index, GameObject target = null)
+        {
+            _skillManagers[index].Trigger(target);
+        }
+        
         public void LevelUp()
         {
             _level += 1;
@@ -75,6 +90,7 @@ namespace DecisionMakingAI
         public string Uid => _uid;
         public int Level => _level;
         public List<ResourceValue> Production => _production;
+        public List<SkillManager> SkillManagers => _skillManagers;
     }
 
         // public virtual void Place()

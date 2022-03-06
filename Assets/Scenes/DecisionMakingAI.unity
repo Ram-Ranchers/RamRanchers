@@ -522,6 +522,7 @@ MonoBehaviour:
   selectedUnitDisplayPrefab: {fileID: 5737410179683681235, guid: 7bc23af4c6852934d8a411769f8d8512, type: 3}
   selectionGroupsParent: {fileID: 1727252872}
   selectedUnitMenu: {fileID: 1000278811}
+  unitSkillButtonPrefab: {fileID: 7816142775801990590, guid: 7a23d062e7ce008469aaed5bfeeb285f, type: 3}
 --- !u!114 &191921335
 MonoBehaviour:
   m_ObjectHideFlags: 0
