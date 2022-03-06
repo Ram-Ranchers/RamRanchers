@@ -12,7 +12,7 @@ namespace DecisionMakingAI
         private GameObject _healthbar;
 
         protected BoxCollider _collider;
-        protected virtual Unit Unit { get; set; }
+        public virtual Unit Unit { get; set; }
 
         private void Awake()
         {
@@ -51,6 +51,8 @@ namespace DecisionMakingAI
                 h.Initialise(transform, boundingBox.height);
                 h.SetPosition();
             }
+            
+            EventManager.TriggerTypedEvent("SelectUnit", new CustomEventData(Unit));
         }
         
         public void Select()
@@ -101,6 +103,7 @@ namespace DecisionMakingAI
             selectionCircle.SetActive(false);
             Destroy(_healthbar);
             _healthbar = null;
+            EventManager.TriggerTypedEvent("DeselectUnit", new CustomEventData(Unit));
         }
 
         public void Initialise(Unit unit)

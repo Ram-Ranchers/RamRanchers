@@ -9,6 +9,9 @@ namespace DecisionMakingAI
         private Vector3 _dragStartPosition;
         private Ray _ray;
         private RaycastHit _raycastHit;
+        private Dictionary<int, List<UnitManager>> _selectionGroups = new Dictionary<int, List<UnitManager>>();
+
+        public UiManager UiManager;
         
         private void Update()
         {
@@ -46,6 +49,65 @@ namespace DecisionMakingAI
             if (_isDraggingMouseBox && _dragStartPosition != Input.mousePosition)
             {
                 SelectUnitsInDraggingBox();
+            }
+
+            if (Input.anyKeyDown)
+            {
+                int alphaKey = Utils.GetAlphaKeyValue(Input.inputString);
+                if (alphaKey != -1)
+                {
+                    if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftApple) || Input.GetKey(KeyCode.RightApple) || Input.GetKey(KeyCode.G))
+                    {
+                        CreatSelectionGroup(alphaKey);
+                    }
+                    else
+                    {
+                        ReselectGroup(alphaKey);
+                    }
+                }
+            }
+        }
+
+        public void SelectUnitsGroup(int groupIndex)
+        {
+            ReselectGroup(groupIndex);
+        }
+
+        private void CreatSelectionGroup(int groupIndex)
+        {
+            if (Globals.Selected_Units.Count == 0)
+            {
+                if (_selectionGroups.ContainsKey(groupIndex))
+                {
+                    RemoveSelectionGroup(groupIndex);
+                }
+
+                return;
+            }
+
+            List<UnitManager> groupUnits = new List<UnitManager>(Globals.Selected_Units);
+            _selectionGroups[groupIndex] = groupUnits;
+            UiManager.ToggleSelectionGroupButton(groupIndex, true);
+        }
+
+        private void RemoveSelectionGroup(int groupIndex)
+        {
+            _selectionGroups.Remove(groupIndex);
+            UiManager.ToggleSelectionGroupButton(groupIndex, false);
+        }
+
+        private void ReselectGroup(int groupIndex)
+        {
+            if (!_selectionGroups.ContainsKey(groupIndex))
+            {
+                return;
+            }
+            
+            DeselectAllUnits();
+            
+            foreach (UnitManager um in _selectionGroups[groupIndex])
+            {
+                um.Select();
             }
         }
 
