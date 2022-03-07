@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace DecisionMakingAI
@@ -10,10 +11,17 @@ namespace DecisionMakingAI
         private Vector3 _lastTargetPosition;
         private Vector2 _pos;
         private float _yOffset;
-        
+        private Transform _camera;
+        private Vector3 _lastCameraPosition;
+
+        private void Awake()
+        {
+            _camera = Camera.main.transform;
+        }
+
         private void Update()
         {
-            if (!_target || _lastTargetPosition == _target.position)
+            if ( _lastCameraPosition == _camera.position && _target && _lastTargetPosition == _target.position)
             {
                 return;
             }
@@ -38,6 +46,7 @@ namespace DecisionMakingAI
             _pos.y += _yOffset;
             rectTransform.anchoredPosition = _pos;
             _lastTargetPosition = _target.position;
+            _lastCameraPosition = _camera.position;
         }
     }
 }
