@@ -122,32 +122,34 @@ namespace DecisionMakingAI
         {
             EventManager.AddListener("UpdateResourceTexts", OnUpdateResourceTexts);
             EventManager.AddListener("CheckBuildingButtons", OnCheckBuildingButtons);
-            EventManager.AddTypedListener("HoverBuildingButton", OnHoverBuildingButton);
+            EventManager.AddListener("HoverBuildingButton", OnHoverBuildingButton);
             EventManager.AddListener("UnhoverBuildingButton", OnUnhoverBuildingButton);
-            EventManager.AddTypedListener("SelectUnit", OnSelectUnit);
-            EventManager.AddTypedListener("DeselectUnit", OnDeselectUnit);
+            EventManager.AddListener("SelectUnit", OnSelectUnit);
+            EventManager.AddListener("DeselectUnit", OnDeselectUnit);
         }
 
         private void OnDisable()
         {
             EventManager.RemoveListener("UpdateResourceTexts", OnUpdateResourceTexts);
             EventManager.RemoveListener("CheckBuildingButtons", OnCheckBuildingButtons);
-            EventManager.RemoveTypedListener("HoverBuildingButton", OnHoverBuildingButton);
+            EventManager.RemoveListener("HoverBuildingButton", OnHoverBuildingButton);
             EventManager.RemoveListener("UnhoverBuildingButton", OnUnhoverBuildingButton);
-            EventManager.RemoveTypedListener("SelectUnit", OnSelectUnit);
-            EventManager.RemoveTypedListener("DeselectUnit", OnDeselectUnit);
+            EventManager.RemoveListener("SelectUnit", OnSelectUnit);
+            EventManager.RemoveListener("DeselectUnit", OnDeselectUnit);
         }
 
-        private void OnSelectUnit(CustomEventData data)
+        private void OnSelectUnit(object data)
         {
-            AddSelectedUnitToUIList(data.unit);
-            SetSelectedUnitMenu(data.unit);
+            Unit unit = (Unit)data;
+            AddSelectedUnitToUIList(unit);
+            SetSelectedUnitMenu(unit);
             ShowSelectedUnitMenu(true);
         }
         
-        private void OnDeselectUnit(CustomEventData data)
+        private void OnDeselectUnit(object data)
         {
-            RemoveSelectedUnitFromUIList(data.unit.Code);
+            Unit unit = (Unit)data;
+            RemoveSelectedUnitFromUIList(unit.Code);
             if (Globals.Selected_Units.Count == 0)
             {
                 ShowSelectedUnitMenu(false);
@@ -266,9 +268,9 @@ namespace DecisionMakingAI
             }
         }
         
-        private void OnHoverBuildingButton(CustomEventData data)
+        private void OnHoverBuildingButton(object data)
         {
-            SetInfoPanel(data.unitData);
+            SetInfoPanel((UnitData)data);
             ShowInfoPanel(true);
         }
 

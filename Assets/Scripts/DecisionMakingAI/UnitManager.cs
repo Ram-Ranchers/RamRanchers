@@ -52,7 +52,7 @@ namespace DecisionMakingAI
                 h.SetPosition();
             }
             
-            EventManager.TriggerTypedEvent("SelectUnit", new CustomEventData(Unit));
+            EventManager.TriggerEvent("SelectUnit", Unit);
         }
         
         public void Select()
@@ -103,7 +103,7 @@ namespace DecisionMakingAI
             selectionCircle.SetActive(false);
             Destroy(_healthbar);
             _healthbar = null;
-            EventManager.TriggerTypedEvent("DeselectUnit", new CustomEventData(Unit));
+            EventManager.TriggerEvent("DeselectUnit", Unit);
         }
 
         public void Initialise(Unit unit)

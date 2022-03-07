@@ -14,7 +14,7 @@ namespace DecisionMakingAI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            EventManager.TriggerTypedEvent("HoverBuildingButton", new CustomEventData(_buildingData));
+            EventManager.TriggerEvent("HoverBuildingButton", _buildingData);
         }
         
         public void OnPointerExit(PointerEventData eventData)
