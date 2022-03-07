@@ -1,12 +1,20 @@
 using System.Collections.Generic;
+using UnityEngine.AI;
 
 namespace DecisionMakingAI
 {
-    public class Globals
+    public static class Globals
     {
         public static int Terrain_Layer_Mask = 1 << 7;
 
         public static BuildingData[] Building_Data;
+
+		public static NavMeshSurface Nav_Mesh_Surface;
+
+		public static void UpdateNavMeshSurface()
+		{
+			Nav_Mesh_Surface.UpdateNavMesh(Nav_Mesh_Surface.navMeshData);
+		}
 
         public static Dictionary<string, GameResource> Game_Resources =
             new Dictionary<string, GameResource>()

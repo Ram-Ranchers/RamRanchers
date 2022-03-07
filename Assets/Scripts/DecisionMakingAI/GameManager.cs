@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace DecisionMakingAI
 {
@@ -11,6 +12,8 @@ namespace DecisionMakingAI
         private void Awake()
         {
             DataHandler.LoadGameData();
+			Globals.Nav_Mesh_Surface = GameObject.Find("Plane").GetComponent<NavMeshSurface>();
+			Globals.UpdateNavMeshSurface();
         }
 
         private void Update()

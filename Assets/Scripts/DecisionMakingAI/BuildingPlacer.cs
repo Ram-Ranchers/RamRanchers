@@ -68,10 +68,14 @@ namespace DecisionMakingAI
             }
             else
             {
+				EventManager.TriggerEvent("PlaceBuildingOff");
                 _placedBuilding = null;
             }
             EventManager.TriggerEvent("UpdateResourceTexts");
             EventManager.TriggerEvent("CheckBuildingButtons");
+			
+			// Update the dynamic nav mesh
+			Globals.UpdateNavMeshSurface();
         }
         
         void CancelPlaceBuilding()
