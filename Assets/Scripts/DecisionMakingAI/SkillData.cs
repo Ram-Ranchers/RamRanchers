@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace DecisionMakingAI
 {
@@ -30,7 +31,7 @@ namespace DecisionMakingAI
                         source.transform.position.y, source.transform.position.z - coll.size.z * -0.7f);
                     CharacterData d = (CharacterData)unitReference;
                     Character c = new Character(d);
-                    c.Transform.position = instantiationPosition;
+                    c.Transform.GetComponent<NavMeshAgent>().Warp(instantiationPosition);
                     c.Transform.GetComponent<CharacterManager>().Initialise(c);
                 }
                     break;

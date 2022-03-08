@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using UnityEngine.AI;
+using Unity.AI.Navigation;
 
 namespace DecisionMakingAI
 {

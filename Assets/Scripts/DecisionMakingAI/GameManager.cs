@@ -1,11 +1,14 @@
 using System;
+using Unity.AI.Navigation;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace DecisionMakingAI
 {
     public class GameManager : MonoBehaviour
     {
+        public static GameManager instance;
+        public Vector3 startPosition;
+        
         private Ray _ray;
         private RaycastHit _raycastHit;
         
@@ -14,6 +17,12 @@ namespace DecisionMakingAI
             DataHandler.LoadGameData();
 			Globals.Nav_Mesh_Surface = GameObject.Find("Plane").GetComponent<NavMeshSurface>();
 			Globals.UpdateNavMeshSurface();
+            GetStartPosition();
+        }
+
+        public void Start()
+        {
+            instance = this;
         }
 
         private void Update()
@@ -37,6 +46,11 @@ namespace DecisionMakingAI
                     }
                 }
             }
+        }
+
+        private void GetStartPosition()
+        {
+            startPosition = Utils.MiddleOfScreenPointToWorld();
         }
         
         //public float producingRate = 3f;

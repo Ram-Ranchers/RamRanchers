@@ -12,6 +12,17 @@ namespace DecisionMakingAI
         private RaycastHit _raycastHit;
         private Vector3 _lastPlacementPosition;
 
+        private void Start()
+        {
+            _placedBuilding = new Building(Globals.Building_Data[0]);
+            _placedBuilding.SetPosition(GameManager.instance.startPosition);
+            
+            _placedBuilding.Transform.GetComponent<BuildingManager>().Initialise(_placedBuilding);
+            PlaceBuilding();
+            
+            CancelPlaceBuilding();
+        }
+
         private void Update()
         {
             if (_placedBuilding != null)

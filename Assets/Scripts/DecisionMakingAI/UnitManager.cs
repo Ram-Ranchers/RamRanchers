@@ -7,7 +7,8 @@ namespace DecisionMakingAI
     public class UnitManager : MonoBehaviour
     {
         public GameObject selectionCircle;
-
+        public GameObject fov;
+        
         private Transform _canvas;
         private GameObject _healthbar;
 
@@ -111,7 +112,12 @@ namespace DecisionMakingAI
             _collider = GetComponent<BoxCollider>();
             Unit = unit;
         }
-        
+
+        public void EnableFOV()
+        {
+            fov.SetActive(true);
+        }
+
         //private bool _selected = false;
         //public bool IsSelected => _selected;
 

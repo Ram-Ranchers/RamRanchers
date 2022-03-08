@@ -37,6 +37,8 @@ namespace DecisionMakingAI
                 sm.Initialise(skill, g);
                 _skillManagers.Add(sm);
             }
+
+            _transform.Find("FOV").transform.localScale = new Vector3(data.fieldOfView, data.fieldOfView, 0f);
         }
 
         public void TriggerSkill(int index, GameObject target = null)
@@ -69,6 +71,8 @@ namespace DecisionMakingAI
             {
                 Globals.Game_Resources[resource.code].AddAmount(-resource.amount);
             }
+
+            _transform.GetComponent<UnitManager>().EnableFOV();
         }
 
         public bool CanBuy()

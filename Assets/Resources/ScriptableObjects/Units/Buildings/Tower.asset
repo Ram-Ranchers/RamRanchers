@@ -24,3 +24,5 @@ MonoBehaviour:
     amount: 80
   - code: stone
     amount: 100
+  skills: []
+  fieldOfView: 35

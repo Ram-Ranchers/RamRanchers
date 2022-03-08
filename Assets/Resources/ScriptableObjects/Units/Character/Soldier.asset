@@ -21,3 +21,4 @@ MonoBehaviour:
   - code: gold
     amount: 30
   skills: []
+  fieldOfView: 22

@@ -154,5 +154,22 @@ namespace DecisionMakingAI
 
             return -1;
         }
+
+        public static Vector3 MiddleOfScreenPointToWorld()
+        {
+            return MiddleOfScreenPointToWorld(Camera.main);
+        }
+
+        public static Vector3 MiddleOfScreenPointToWorld(Camera camera)
+        {
+            RaycastHit hit;
+            Ray ray = camera.ScreenPointToRay(0.5f * new Vector2(Screen.width, Screen.height));
+            if (Physics.Raycast(ray, out hit, 1000f, Globals.Terrain_Layer_Mask))
+            {
+                return hit.point;
+            }
+            
+            return Vector3.zero;
+        }
     }
 }
