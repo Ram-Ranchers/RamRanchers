@@ -1,4 +1,3 @@
-using System;
 using Unity.AI.Navigation;
 using UnityEngine;
 
@@ -8,6 +7,7 @@ namespace DecisionMakingAI
     {
         public static GameManager instance;
         public Vector3 startPosition;
+        public GameParameters gameParameters;
         
         private Ray _ray;
         private RaycastHit _raycastHit;
@@ -17,6 +17,7 @@ namespace DecisionMakingAI
             DataHandler.LoadGameData();
 			Globals.Nav_Mesh_Surface = GameObject.Find("Plane").GetComponent<NavMeshSurface>();
 			Globals.UpdateNavMeshSurface();
+            GetComponent<DayAndNightCycler>().enabled = gameParameters.enableDayAndNightCycle;
             GetStartPosition();
         }
 
