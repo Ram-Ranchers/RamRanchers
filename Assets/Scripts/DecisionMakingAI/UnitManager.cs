@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -113,9 +114,28 @@ namespace DecisionMakingAI
             Unit = unit;
         }
 
-        public void EnableFOV()
+        public void EnableFOV(float size)
         {
             fov.SetActive(true);
+            MeshRenderer mr = fov.GetComponent<MeshRenderer>();
+            mr.material = new Material(mr.material);
+            StartCoroutine(ScalingFOV(size));
+        }
+
+        private IEnumerator ScalingFOV(float size)
+        {
+            float r = 0f, t = 0f, step = 0.05f;
+            float scaleUpTime = 0.35f;
+            Vector3 startScale = fov.transform.localScale;
+            Vector3 endScale = size * Vector3.one;
+            endScale.z = 1f;
+            do
+            {
+                fov.transform.localScale = Vector3.Lerp(startScale, endScale, r);
+                t += step;
+                r = t / scaleUpTime;
+                yield return new WaitForSeconds(step);
+            } while (r < 1f);
         }
 
         //private bool _selected = false;

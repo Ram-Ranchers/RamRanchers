@@ -14,7 +14,7 @@ namespace DecisionMakingAI
 
         private void Start()
         {
-            _placedBuilding = new Building(Globals.Building_Data[0]);
+            _placedBuilding = new Building(GameManager.instance.gameParameters.initialBuilding);
             _placedBuilding.SetPosition(GameManager.instance.startPosition);
             
             _placedBuilding.Transform.GetComponent<BuildingManager>().Initialise(_placedBuilding);

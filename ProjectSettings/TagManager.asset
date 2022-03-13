@@ -16,8 +16,8 @@ TagManager:
   - Enemy
   - Terrain
   - FOV
-  - 
-  - 
+  - FlatTerrain
+  - Minimap
   - 
   - 
   - 

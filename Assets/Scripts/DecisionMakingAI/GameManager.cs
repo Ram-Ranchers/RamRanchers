@@ -19,6 +19,7 @@ namespace DecisionMakingAI
 			Globals.UpdateNavMeshSurface();
             GetComponent<DayAndNightCycler>().enabled = gameParameters.enableDayAndNightCycle;
             GetStartPosition();
+            GameObject.Find("FogOfWar").SetActive(gameParameters.enableFOV);
         }
 
         public void Start()

@@ -12,7 +12,8 @@ namespace DecisionMakingAI
         protected int _level;
         protected List<ResourceValue> _production;
         protected List<SkillManager> _skillManagers;
-
+        protected float _fieldOfView;
+        
         public Unit(UnitData data) : this(data, new List<ResourceValue>() {})
         {
         }
@@ -38,7 +39,7 @@ namespace DecisionMakingAI
                 _skillManagers.Add(sm);
             }
 
-            _transform.Find("FOV").transform.localScale = new Vector3(data.fieldOfView, data.fieldOfView, 0f);
+            _fieldOfView = data.fieldOfView;
         }
 
         public void TriggerSkill(int index, GameObject target = null)
@@ -72,7 +73,7 @@ namespace DecisionMakingAI
                 Globals.Game_Resources[resource.code].AddAmount(-resource.amount);
             }
 
-            _transform.GetComponent<UnitManager>().EnableFOV();
+            _transform.GetComponent<UnitManager>().EnableFOV(_fieldOfView);
         }
 
         public bool CanBuy()

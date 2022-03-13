@@ -7,6 +7,8 @@ namespace DecisionMakingAI
     {
         public static int Terrain_Layer_Mask = 1 << 7;
 
+        public static int Flat_Terrain_Layer_Mask = 1 << 9;
+
         public static BuildingData[] Building_Data;
 
 		public static NavMeshSurface Nav_Mesh_Surface;

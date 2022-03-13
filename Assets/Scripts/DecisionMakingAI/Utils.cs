@@ -171,5 +171,28 @@ namespace DecisionMakingAI
             
             return Vector3.zero;
         }
+
+        public static Vector3[] ScreenCornersToWorldPoints()
+        {
+            return ScreenCornersToWorldPoints(Camera.main);
+        }
+
+        public static Vector3[] ScreenCornersToWorldPoints(Camera cam)
+        {
+            Vector3[] corners = new Vector3[4];
+            RaycastHit hit;
+
+            for (int i = 0; i < 4; i++)
+            {
+                Ray ray = cam.ScreenPointToRay(new Vector2((i % 2) * Screen.width, (int)(i / 2) * Screen.height));
+                
+                if (Physics.Raycast(ray, out hit, 1000f, Globals.Flat_Terrain_Layer_Mask))
+                {
+                    corners[i] = hit.point;
+                }
+            }
+
+            return corners;
+        }
     }
 }
