@@ -14,7 +14,10 @@ namespace DecisionMakingAI
         public List<ResourceValue> cost;
         public List<SkillData> skills = new List<SkillData>();
         public float fieldOfView;
-            
+
+        [Header("General Sounds")] 
+        public AudioClip onSelectSound;
+        
         public bool CanBuy()
         {
             foreach (ResourceValue resource in cost)

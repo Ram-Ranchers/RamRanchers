@@ -11,7 +11,7 @@ namespace DecisionMakingAI
         public float altitude = 40f;
         public float zoomSpeed = 30f;
         public Material MinimapIndicatorMaterial;
-
+        public Transform groundTarget;
 
         private Camera _camera;
         private RaycastHit _hit;
@@ -30,6 +30,7 @@ namespace DecisionMakingAI
             _mouseOnScreenBorder = -1;
             _mouseOnScreenCoroutine = null;
             PrepareMapIndicator();
+            groundTarget.position = Utils.MiddleOfScreenPointToWorld();
         }
 
         private void Update()
@@ -163,7 +164,8 @@ namespace DecisionMakingAI
         private void ComputeMinimapIndicator(bool zooming)
         {
             Vector3 middle = Utils.MiddleOfScreenPointToWorld();
-
+            groundTarget.position = middle;
+            
             if (zooming)
             {
                 Vector3[] viewCorners = Utils.ScreenCornersToWorldPoints();

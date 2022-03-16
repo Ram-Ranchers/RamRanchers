@@ -9,6 +9,7 @@ namespace DecisionMakingAI
     {
         public GameObject selectionCircle;
         public GameObject fov;
+        public AudioSource contextualSource;
         
         private Transform _canvas;
         private GameObject _healthbar;
@@ -55,6 +56,7 @@ namespace DecisionMakingAI
             }
             
             EventManager.TriggerEvent("SelectUnit", Unit);
+            contextualSource.PlayOneShot(Unit.Data.onSelectSound);
         }
         
         public void Select()

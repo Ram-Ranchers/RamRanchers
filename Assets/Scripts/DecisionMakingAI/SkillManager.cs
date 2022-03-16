@@ -11,11 +11,18 @@ namespace DecisionMakingAI
         private GameObject _source;
         private Button _button;
         private bool _ready;
-
+        private AudioSource _sourceContextualSource;
+        
         public void Initialise(SkillData skill, GameObject source)
         {
             this.skill = skill;
             _source = source;
+
+            UnitManager um = source.GetComponent<UnitManager>();
+            if (um != null)
+            {
+                _sourceContextualSource = um.contextualSource;
+            }
         }
 
         public void Trigger(GameObject target = null)
@@ -36,7 +43,17 @@ namespace DecisionMakingAI
 
         private IEnumerator WrappedTrigger(GameObject target)
         {
+            if (_sourceContextualSource != null && skill.onStartSound)
+            {
+                _sourceContextualSource.PlayOneShot(skill.onStartSound);
+            }
             yield return new WaitForSeconds(skill.castTime);
+
+            if (_sourceContextualSource != null && skill.onEndSound)
+            {
+                _sourceContextualSource.PlayOneShot(skill.onEndSound);                
+            }
+            
             skill.Trigger(_source, target);
             SetReady(false);
             yield return new WaitForSeconds(skill.cooldown);

@@ -87,6 +87,8 @@ namespace DecisionMakingAI
 			
 			// Update the dynamic nav mesh
 			Globals.UpdateNavMeshSurface();
+            
+            EventManager.TriggerEvent("PlaySoundByName", "onBuildingPlacedSound");
         }
         
         void CancelPlaceBuilding()

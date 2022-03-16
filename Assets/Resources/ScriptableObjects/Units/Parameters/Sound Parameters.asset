@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d75b3181287be4abb1fa2d0344b329, type: 3}
-  m_Name: Parameters
+  m_Script: {fileID: 11500000, guid: 8adc5796110a3bf4293918dfad9462d4, type: 3}
+  m_Name: Sound Parameters
   m_EditorClassIdentifier: 
-  enableDayAndNightCycle: 0
-  dayLengthInSeconds: 20
-  dayInitialRatio: 0.2
-  initialBuilding: {fileID: 11400000, guid: fa6270761f56b8a458f2a98fa7e70999, type: 2}
-  enableFOV: 1
+  onDayStartSound: {fileID: 0}
+  onNightStartSound: {fileID: 0}

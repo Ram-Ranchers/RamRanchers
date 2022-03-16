@@ -17,7 +17,15 @@ namespace DecisionMakingAI
 
         public void MoveTo(Vector3 targetPosition)
         {
+            NavMeshPath path = new NavMeshPath();
+            agent.CalculatePath(targetPosition, path);
+            if (path.status == NavMeshPathStatus.PathInvalid)
+            {
+                contextualSource.PlayOneShot(((CharacterData)Unit.Data).onMoveInvalidSound);
+            }
+            
             agent.destination = targetPosition;
+            contextualSource.PlayOneShot(((CharacterData)Unit.Data).onMoveValidSound);
         }
     }
 }
