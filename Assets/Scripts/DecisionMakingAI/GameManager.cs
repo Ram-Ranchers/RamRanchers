@@ -7,7 +7,7 @@ namespace DecisionMakingAI
     {
         public static GameManager instance;
         public Vector3 startPosition;
-        public GameParameters gameParameters;
+        public GameGlobalParameters gameGlobalParameters;
         
         private Ray _ray;
         private RaycastHit _raycastHit;
@@ -17,14 +17,26 @@ namespace DecisionMakingAI
             DataHandler.LoadGameData();
 			Globals.Nav_Mesh_Surface = GameObject.Find("Plane").GetComponent<NavMeshSurface>();
 			Globals.UpdateNavMeshSurface();
-            GetComponent<DayAndNightCycler>().enabled = gameParameters.enableDayAndNightCycle;
+            GetComponent<DayAndNightCycler>().enabled = gameGlobalParameters.enableDayAndNightCycle;
+            GameObject.Find("FogOfWar").SetActive(gameGlobalParameters.enableFOV);
             GetStartPosition();
-            GameObject.Find("FogOfWar").SetActive(gameParameters.enableFOV);
         }
 
         public void Start()
         {
             instance = this;
+
+            GameParameters[] gameParametersList = Resources.LoadAll<GameParameters>("ScriptableObjects/Parameters");
+
+            foreach (GameParameters parameters in gameParametersList)
+            {
+                Debug.Log(parameters.GetParametersName());
+                Debug.Log("> Fields shown in-game:");
+                foreach (string fieldName in parameters.FieldsToShowInGame)
+                {
+                    Debug.Log($"     {fieldName}");
+                }
+            }
         }
 
         private void Update()
