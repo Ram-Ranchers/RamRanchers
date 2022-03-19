@@ -1,3 +1,4 @@
+using System;
 using Unity.AI.Navigation;
 using UnityEngine;
 
@@ -8,6 +9,10 @@ namespace DecisionMakingAI
         public static GameManager instance;
         public Vector3 startPosition;
         public GameGlobalParameters gameGlobalParameters;
+        public GameObject fov;
+        
+        [HideInInspector] 
+        public bool gameIsPaused;
         
         private Ray _ray;
         private RaycastHit _raycastHit;
@@ -20,6 +25,8 @@ namespace DecisionMakingAI
             GetComponent<DayAndNightCycler>().enabled = gameGlobalParameters.enableDayAndNightCycle;
             GameObject.Find("FogOfWar").SetActive(gameGlobalParameters.enableFOV);
             GetStartPosition();
+            gameIsPaused = false;
+            fov.SetActive(gameGlobalParameters.enableFOV);
         }
 
         public void Start()
@@ -41,6 +48,11 @@ namespace DecisionMakingAI
 
         private void Update()
         {
+            if (gameIsPaused)
+            {
+                return;
+            }
+            
             CheckUnitsNavigation();
         }
 
@@ -66,7 +78,45 @@ namespace DecisionMakingAI
         {
             startPosition = Utils.MiddleOfScreenPointToWorld();
         }
-        
+
+        private void OnEnable()
+        {
+            EventManager.AddListener("PauseGame", OnPauseGame);
+            EventManager.AddListener("ResumeGame", OnResumeGame);
+            EventManager.AddListener("UpdateGameParameter:enableDayAndNightCycle", OnUpdateDayAndNightCycle);
+            EventManager.AddListener("UpdateGameParameter:enableFOV", OnUpdateFOV);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.RemoveListener("PauseGame", OnPauseGame);
+            EventManager.RemoveListener("ResumeGame", OnResumeGame);
+            EventManager.RemoveListener("UpdateGameParameter:enableDayAndNightCycle", OnUpdateDayAndNightCycle);
+            EventManager.RemoveListener("UpdateGameParameter:enableFOV", OnUpdateFOV);
+        }
+
+        private void OnPauseGame()
+        {
+            gameIsPaused = true;
+        }
+
+        private void OnResumeGame()
+        {
+            gameIsPaused = false;
+        }
+
+        private void OnUpdateDayAndNightCycle(object data)
+        {
+            bool dayAndNightIsOn = (bool)data;
+            GetComponent<DayAndNightCycler>().enabled = dayAndNightIsOn;
+        }
+
+        private void OnUpdateFOV(object data)
+        {
+            bool fovIsOn = (bool)data;
+            fov.SetActive(fovIsOn);
+        }
+
         //public float producingRate = 3f;
 
        //public void Start()

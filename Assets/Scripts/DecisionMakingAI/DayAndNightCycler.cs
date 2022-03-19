@@ -10,6 +10,7 @@ namespace DecisionMakingAI
         private float _starsRefreshRate;
         private float _rotationAngleStep;
         private Vector3 _rotationAxis;
+        private Coroutine _starsCoroutine = null;
         
         private void Start()
         {
@@ -19,6 +20,11 @@ namespace DecisionMakingAI
             _rotationAngleStep = 360f * _starsRefreshRate / GameManager.instance.gameGlobalParameters.dayLengthInSeconds;
             
             StartCoroutine("UpdateStars");
+
+            if (!GameManager.instance.gameIsPaused)
+            {
+                _starsCoroutine = StartCoroutine("UpdateStars");
+            }
         }
 
         private IEnumerator UpdateStars()
@@ -40,6 +46,35 @@ namespace DecisionMakingAI
                 }
                 
                 yield return new WaitForSeconds(_starsRefreshRate);
+            }
+        }
+        
+        private void OnEnable()
+        {
+            EventManager.AddListener("PauseGame", OnPauseGame);
+            EventManager.AddListener("ResumeGame", OnResumeGame);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.RemoveListener("PauseGame", OnPauseGame);
+            EventManager.RemoveListener("ResumeGame", OnResumeGame);
+        }
+
+        private void OnPauseGame()
+        {
+            if (_starsCoroutine != null)
+            {
+                StopCoroutine(_starsCoroutine);
+                _starsCoroutine = null;
+            }
+        }
+
+        private void OnResumeGame()
+        {
+            if (_starsCoroutine == null)
+            {
+                _starsCoroutine = StartCoroutine("UpdateStars");
             }
         }
     }

@@ -35,6 +35,11 @@ namespace DecisionMakingAI
 
         private void Update()
         {
+            if (GameManager.instance.gameIsPaused)
+            {
+                return;
+            }
+            
             if (_mouseOnScreenBorder >= 0)
             {
                 TranslateCamera(_mouseOnScreenBorder);

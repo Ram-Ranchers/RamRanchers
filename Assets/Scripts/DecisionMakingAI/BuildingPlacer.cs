@@ -25,6 +25,11 @@ namespace DecisionMakingAI
 
         private void Update()
         {
+            if (GameManager.instance.gameIsPaused)
+            {
+                return;
+            }
+            
             if (_placedBuilding != null)
             {
                 if (Input.GetKeyUp(KeyCode.Escape))
