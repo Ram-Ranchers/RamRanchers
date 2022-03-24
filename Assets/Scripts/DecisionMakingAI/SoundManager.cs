@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -8,11 +10,15 @@ namespace DecisionMakingAI
     {
         public AudioSource audioSource;
         public GameSoundParameters soundParameters;
-
-        public AudioMixerSnapshot paused;
-        public AudioMixerSnapshot unpaused;
-        public AudioMixer masterMixer;
         
+        public AudioMixer masterMixer;
+
+        private void Start()
+        {
+            masterMixer.SetFloat("musicVol", soundParameters.musicVolume);
+            masterMixer.SetFloat("sfxVol", soundParameters.sfxVolume);
+        }
+
         private void OnEnable()
         {
             EventManager.AddListener("PlaySoundByName", OnPlaySoundByName);
@@ -57,13 +63,18 @@ namespace DecisionMakingAI
 
         private void OnPauseGame()
         {
-            paused.TransitionTo(0.01f);
+            StartCoroutine(TransitioningVolume("musicVol", soundParameters.musicVolume, soundParameters.musicVolume - 6,
+                0.5f));
+            StartCoroutine(TransitioningVolume("sfxVol", soundParameters.sfxVolume,  -80,
+                0.5f));
         }
 
         private void OnResumeGame()
         {
-            unpaused.TransitionTo(0.01f);
-        }
+            StartCoroutine(TransitioningVolume("musicVol", soundParameters.musicVolume - 6, soundParameters.musicVolume,
+                0.5f));
+            StartCoroutine(TransitioningVolume("sfxVol", -80,  soundParameters.sfxVolume,
+                0.5f));        }
 
         private void OnUpdateMusicVolume(object data)
         {
@@ -73,8 +84,26 @@ namespace DecisionMakingAI
 
         private void OnUpdateSfxVolume(object data)
         {
+            if (GameManager.instance.gameIsPaused)
+            {
+                return;
+            }
+            
             float volume = (float)data;
             masterMixer.SetFloat("sfxVol", volume);
+        }
+
+        private IEnumerator TransitioningVolume(string volumeParameter, float from, float to, float delay)
+        {
+            float t = 0;
+            while (t < delay)
+            {
+                masterMixer.SetFloat(volumeParameter, Mathf.Lerp(from, to, t/ delay));
+                t += Time.deltaTime;
+                yield return null;
+            }
+
+            masterMixer.SetFloat(volumeParameter, to);
         }
     }
 }

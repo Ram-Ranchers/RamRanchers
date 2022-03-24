@@ -117,6 +117,13 @@ namespace DecisionMakingAI
             fov.SetActive(fovIsOn);
         }
 
+        private void OnApplicationQuit()
+        {
+            #if !UNITY_EDITOR
+            DataHandler.SaveGameData();
+            #endif
+        }
+
         //public float producingRate = 3f;
 
        //public void Start()

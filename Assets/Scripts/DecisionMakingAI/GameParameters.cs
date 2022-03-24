@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DecisionMakingAI
 {
-    public abstract class GameParameters : ScriptableObject
+    public abstract class GameParameters : JSONSerialisableScriptableObject
     {
         public abstract string GetParametersName();
 
