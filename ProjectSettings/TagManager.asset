@@ -4,7 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Ram
+  - Terrain
+  - Unit
   layers:
   - Default
   - TransparentFX
@@ -13,10 +14,10 @@ TagManager:
   - Water
   - UI
   - Enemy
-  - 
-  - 
-  - 
-  - 
+  - Terrain
+  - FOV
+  - FlatTerrain
+  - Minimap
   - 
   - 
   - 
