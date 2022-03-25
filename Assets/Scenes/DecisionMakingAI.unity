@@ -850,6 +850,7 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   gameGlobalParameters: {fileID: 11400000, guid: 4c987099a0f4ea044aaaa4cd028775fb, type: 2}
   fov: {fileID: 290489421}
+  gamePlayersParameters: {fileID: 11400000, guid: b1de87a76efacbc468dc9bec48d6dc35, type: 2}
   gameIsPaused: 0
 --- !u!114 &191921338
 MonoBehaviour:

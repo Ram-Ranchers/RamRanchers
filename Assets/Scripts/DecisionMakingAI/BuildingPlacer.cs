@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -14,13 +15,10 @@ namespace DecisionMakingAI
 
         private void Start()
         {
-            _placedBuilding = new Building(GameManager.instance.gameGlobalParameters.initialBuilding);
-            _placedBuilding.SetPosition(GameManager.instance.startPosition);
+            SpawnBuilding(GameManager.instance.gameGlobalParameters.initialBuilding,
+                GameManager.instance.gamePlayersParameters.myPlayerId, GameManager.instance.startPosition);
             
-            _placedBuilding.Transform.GetComponent<BuildingManager>().Initialise(_placedBuilding);
-            PlaceBuilding();
-            
-            CancelPlaceBuilding();
+            SpawnBuilding(GameManager.instance.gameGlobalParameters.initialBuilding, 0, Vector3.zero);
         }
 
         private void Update()
@@ -64,10 +62,11 @@ namespace DecisionMakingAI
                 Destroy(_placedBuilding.Transform.gameObject);
             }
 
-            Building building = new Building(Globals.Building_Data[buildingDataIndex]);
-            building.Transform.GetComponent<BuildingManager>().Initialise(building);
+            Building building = new Building(Globals.Building_Data[buildingDataIndex],
+                GameManager.instance.gamePlayersParameters.myPlayerId);
             _placedBuilding = building;
             _lastPlacementPosition = Vector3.zero;
+            EventManager.TriggerEvent("PlaceBuildingOn");
         }
 
         public void SelectPlacedBuilding(int buildingDataIndex)
@@ -75,18 +74,22 @@ namespace DecisionMakingAI
             PreparePlacedBuilding(buildingDataIndex);
         }
         
-        void PlaceBuilding()
+        void PlaceBuilding(bool canChain = true)
         {
             _placedBuilding.Place();
-            if (_placedBuilding.CanBuy())
+            if (canChain)
             {
-                PreparePlacedBuilding(_placedBuilding.DataIndex);
+                if (_placedBuilding.CanBuy())
+                {
+                    PreparePlacedBuilding(_placedBuilding.DataIndex);
+                }
+                else
+                {
+                    EventManager.TriggerEvent("PlaceBuildingOff");
+                    _placedBuilding = null;
+                } 
             }
-            else
-            {
-				EventManager.TriggerEvent("PlaceBuildingOff");
-                _placedBuilding = null;
-            }
+
             EventManager.TriggerEvent("UpdateResourceTexts");
             EventManager.TriggerEvent("CheckBuildingButtons");
 			
@@ -100,6 +103,22 @@ namespace DecisionMakingAI
         {
             Destroy(_placedBuilding.Transform.gameObject);
             _placedBuilding = null;
+        }
+
+        public void SpawnBuilding(BuildingData data, int owner, Vector3 position)
+        {
+            SpawnBuilding(data, owner, position, new List<ResourceValue>() {});
+        }
+
+        public void SpawnBuilding(BuildingData data, int owner, Vector3 position, List<ResourceValue> production)
+        {
+            Building prevPlacedBuilding = _placedBuilding;
+
+            _placedBuilding = new Building(data, owner, production);
+            _placedBuilding.SetPosition(position);
+            PlaceBuilding();
+
+            _placedBuilding = prevPlacedBuilding;
         }
         
         //private void Start()

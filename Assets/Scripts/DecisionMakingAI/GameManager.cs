@@ -10,6 +10,7 @@ namespace DecisionMakingAI
         public Vector3 startPosition;
         public GameGlobalParameters gameGlobalParameters;
         public GameObject fov;
+        public GamePlayersParameters gamePlayersParameters;
         
         [HideInInspector] 
         public bool gameIsPaused;

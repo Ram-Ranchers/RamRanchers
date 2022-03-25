@@ -10,6 +10,7 @@ namespace DecisionMakingAI
         public GameObject selectionCircle;
         public GameObject fov;
         public AudioSource contextualSource;
+        public int ownerMaterialSlotIndex = 0;
         
         private Transform _canvas;
         private GameObject _healthbar;
@@ -29,12 +30,17 @@ namespace DecisionMakingAI
         
         private void OnMouseDown()
         {
-            if (IsActive())
+            if (IsActive() && IsMyUnit())
             {
                 Select(true, Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
             }
         }
 
+        private bool IsMyUnit()
+        {
+            return Unit.Owner == GameManager.instance.gamePlayersParameters.myPlayerId;
+        }
+        
         private void SelectUtil()
         {
             if (Globals.Selected_Units.Contains(this))
@@ -140,6 +146,14 @@ namespace DecisionMakingAI
             } while (r < 1f);
         }
 
+        public void SetOwnerMaterial(int owner)
+        {
+            Color playerColour = GameManager.instance.gamePlayersParameters.players[owner].colour;
+            Material[] materials = transform.Find("Mesh").GetComponent<Renderer>().materials;
+            materials[ownerMaterialSlotIndex].color = playerColour;
+            transform.Find("Mesh").GetComponent<Renderer>().materials = materials;
+        }
+        
         //private bool _selected = false;
         //public bool IsSelected => _selected;
 
