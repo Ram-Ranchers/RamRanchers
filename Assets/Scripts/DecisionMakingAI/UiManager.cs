@@ -30,10 +30,13 @@ namespace DecisionMakingAI
         public GameObject sliderPrefab;
         public GameObject togglePrefab;
 
+        [Header("Placed Building Production")] 
+        public RectTransform PlacedBuildingProductionTransform;
+        
         private Text _infoPanelTitleText;
         private Text _infoPanelDescriptionText;
         private Transform _infoPanelResourcesCostParent;
-        private Dictionary<string, Text> _resourceTexts;
+        private Dictionary<InGameResource, Text> _resourceTexts;
         private Dictionary<string, Button> _buildingButtons;
         private RectTransform _selectedUnitContentRectTransform;
         private RectTransform _selectedUnitButtonsRectTransform;
@@ -46,11 +49,11 @@ namespace DecisionMakingAI
 
         private void Awake()
         {
-            _resourceTexts = new Dictionary<string, Text>();
-            foreach (KeyValuePair<string, GameResource> pair in Globals.Game_Resources)
+            _resourceTexts = new Dictionary<InGameResource, Text>();
+            foreach (KeyValuePair<InGameResource, GameResource> pair in Globals.Game_Resources)
             {
                 GameObject display = Instantiate(gameResourcesDisplayPrefab, resourcesUIParent);
-                display.name = pair.Key;
+                display.name = pair.Key.ToString();
                 _resourceTexts[pair.Key] = display.transform.Find("Text").GetComponent<Text>();
                 SetResourceText(pair.Key, pair.Value.Amount);
             }
@@ -104,6 +107,8 @@ namespace DecisionMakingAI
                 _gameParameters[p.GetParametersName()] = p;
                 SetupGameSettingsPanel();
             }
+            
+            PlacedBuildingProductionTransform.gameObject.SetActive(false);
         }
 
         private void SetupGameSettingsPanel()
@@ -247,14 +252,14 @@ namespace DecisionMakingAI
             EventManager.TriggerEvent(showGameSettingsPanel ? "PauseGame" : "ResumeGame");
         }
         
-        private void SetResourceText(string resource, int value)
+        private void SetResourceText(InGameResource resource, int value)
         {
             _resourceTexts[resource].text = value.ToString();
         }
 
         public void OnUpdateResourceTexts()
         {
-            foreach (KeyValuePair<string, GameResource> pair in Globals.Game_Resources)
+            foreach (KeyValuePair<InGameResource, GameResource> pair in Globals.Game_Resources)
             {
                 SetResourceText(pair.Key, pair.Value.Amount);
             }
@@ -281,6 +286,9 @@ namespace DecisionMakingAI
             EventManager.AddListener("UnhoverBuildingButton", OnUnhoverBuildingButton);
             EventManager.AddListener("SelectUnit", OnSelectUnit);
             EventManager.AddListener("DeselectUnit", OnDeselectUnit);
+            EventManager.AddListener("UpdatePlacedBuildingProduction", OnUpdatePlacedBuildingProduction);
+            EventManager.AddListener("PlaceBuildingOn", OnPlaceBuildingOn);
+            EventManager.AddListener("PlaceBuildingOff", OnPlaceBuildingOff);
         }
 
         private void OnDisable()
@@ -291,8 +299,49 @@ namespace DecisionMakingAI
             EventManager.RemoveListener("UnhoverBuildingButton", OnUnhoverBuildingButton);
             EventManager.RemoveListener("SelectUnit", OnSelectUnit);
             EventManager.RemoveListener("DeselectUnit", OnDeselectUnit);
+            EventManager.RemoveListener("UpdatePlacedBuildingProduction", OnUpdatePlacedBuildingProduction);
+            EventManager.RemoveListener("PlaceBuildingOn", OnPlaceBuildingOn);
+            EventManager.RemoveListener("PlaceBuildingOff", OnPlaceBuildingOff);
         }
 
+        private void OnUpdatePlacedBuildingProduction(object data)
+        {
+            object[] values = (object[])data;
+            Dictionary<InGameResource, int> production = (Dictionary<InGameResource, int>)values[0];
+            Vector3 pos = (Vector3)values[1];
+
+            foreach (Transform child in PlacedBuildingProductionTransform.gameObject.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            GameObject g;
+            Transform t;
+            foreach (KeyValuePair<InGameResource, int> pair in production)
+            {
+                g = GameObject.Instantiate(gameResourceCostPrefab, PlacedBuildingProductionTransform.transform);
+                t = g.transform;
+                t.Find("Text").GetComponent<Text>().text = $"+{pair.Value}";
+                t.Find("Icon").GetComponent<Image>().sprite =
+                    Resources.Load<Sprite>($"Textures/GameResources/{pair.Key}");
+            }
+
+            PlacedBuildingProductionTransform.sizeDelta = new Vector2(80, 24 * production.Count);
+
+            PlacedBuildingProductionTransform.anchoredPosition = (Vector2)Camera.main.WorldToScreenPoint(pos) +
+                                                                 Vector2.right * 40f + Vector2.up * 10f;
+        }
+
+        private void OnPlaceBuildingOn()
+        {
+            PlacedBuildingProductionTransform.gameObject.SetActive(true);
+        }
+
+        private void OnPlaceBuildingOff()
+        {
+            PlacedBuildingProductionTransform.gameObject.SetActive(false);
+        }
+        
         private void OnSelectUnit(object data)
         {
             Unit unit = (Unit)data;
@@ -335,15 +384,14 @@ namespace DecisionMakingAI
 
             if (unit.Production.Count > 0)
             {
-                GameObject g;
-                Transform t;
-                foreach (ResourceValue resource in unit.Production)
+                GameObject g; Transform t;
+                foreach (KeyValuePair<InGameResource, int> resource in unit.Production)
                 {
                     g = GameObject.Instantiate(gameResourceCostPrefab, _selectedUnitResourcesProductionParent);
                     t = g.transform;
-                    t.Find("Text").GetComponent<Text>().text = $"+{resource.amount}";
+                    t.Find("Text").GetComponent<Text>().text = $"+{resource.Value}";
                     t.Find("Icon").GetComponent<Image>().sprite =
-                        Resources.Load<Sprite>($"Textures/GameResources/{resource.code}");
+                        Resources.Load<Sprite>($"Textures/GameResources/{resource.Key}");
                 }
             }
 

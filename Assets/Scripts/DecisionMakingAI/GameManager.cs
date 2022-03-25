@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEngine;
 
@@ -11,9 +13,13 @@ namespace DecisionMakingAI
         public GameGlobalParameters gameGlobalParameters;
         public GameObject fov;
         public GamePlayersParameters gamePlayersParameters;
-        
+
         [HideInInspector] 
+        public List<Unit> ownedProducingUnits = new List<Unit>();
         public bool gameIsPaused;
+        private float _producingRate = 3f;
+        private Coroutine _producingResourcesCoroutine = null;
+
         
         private Ray _ray;
         private RaycastHit _raycastHit;
@@ -33,7 +39,8 @@ namespace DecisionMakingAI
         public void Start()
         {
             instance = this;
-
+            _producingResourcesCoroutine = StartCoroutine("ProducingResources");
+            
             GameParameters[] gameParametersList = Resources.LoadAll<GameParameters>("ScriptableObjects/Parameters");
 
             foreach (GameParameters parameters in gameParametersList)
@@ -99,11 +106,20 @@ namespace DecisionMakingAI
         private void OnPauseGame()
         {
             gameIsPaused = true;
+            if (_producingResourcesCoroutine != null)
+            {
+                StopCoroutine(_producingResourcesCoroutine);
+                _producingResourcesCoroutine = null;
+            }
         }
 
         private void OnResumeGame()
         {
             gameIsPaused = false;
+            if (_producingResourcesCoroutine == null)
+            {
+                _producingResourcesCoroutine = StartCoroutine("ProducingResources");
+            }
         }
 
         private void OnUpdateDayAndNightCycle(object data)
@@ -125,6 +141,19 @@ namespace DecisionMakingAI
             #endif
         }
 
+        private IEnumerator ProducingResources()
+        {
+            while(true)
+            {
+                foreach (Unit unit in ownedProducingUnits)
+                {
+                    unit.ProduceResources();
+                    EventManager.TriggerEvent("UpdateResourceTexts");
+                    yield return new WaitForSeconds(_producingRate);
+                }
+            }
+        }
+        
         //public float producingRate = 3f;
 
        //public void Start()

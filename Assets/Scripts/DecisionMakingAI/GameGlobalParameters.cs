@@ -6,6 +6,12 @@ namespace DecisionMakingAI
     public class GameGlobalParameters : GameParameters
     {
         public override string GetParametersName() => "Global";
+
+        public int baseGoldProduction;
+        public int bonusGoldProductionPerBuilding;
+        public float goldBonusRange;
+        public float woodProductionRange;
+        public float stoneProductionRange;
         
         [Header("Day and Night")]
         public bool enableDayAndNightCycle;
@@ -17,5 +23,19 @@ namespace DecisionMakingAI
         
         [Header("FOV")]
         public bool enableFOV;
+
+        public delegate int ResourceProductionFunc(float distance);
+
+        [HideInInspector] 
+        public ResourceProductionFunc WoodProductionFunc = (float distance) =>
+        {
+            return Mathf.CeilToInt(10 * 1f / distance);
+        };
+
+        [HideInInspector] 
+        public ResourceProductionFunc stoneProductionFunc = (float distance) =>
+        {
+            return Mathf.CeilToInt(2 * 1f / distance);
+        };
     }
 }
