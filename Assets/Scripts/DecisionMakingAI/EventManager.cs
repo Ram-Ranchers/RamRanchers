@@ -27,7 +27,7 @@ namespace DecisionMakingAI
                     if (!_eventManager)
                     {
                         Debug.LogError(
-                            "There needs to be one active EventManager script on a GameObject in your scene");
+                            "There needs to be one active EventManager script on a GameObject in your scene.");
                     }
                     else
                     {

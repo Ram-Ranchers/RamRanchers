@@ -26,6 +26,22 @@ namespace DecisionMakingAI
                 return;
             }
             
+            if (Input.GetMouseButtonDown(0))
+            {
+                _isDraggingMouseBox = true;
+                _dragStartPosition = Input.mousePosition;
+            }
+            
+            if (Input.GetMouseButtonUp(0))
+            {
+                _isDraggingMouseBox = false;
+            }
+            
+            if (_isDraggingMouseBox && _dragStartPosition != Input.mousePosition)
+            {
+                SelectUnitsInDraggingBox();
+            }
+            
             if (Globals.Selected_Units.Count > 0)
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
@@ -44,22 +60,6 @@ namespace DecisionMakingAI
                         }
                     }
                 }
-            }
-            
-            if (Input.GetMouseButtonDown(0))
-            {
-                _isDraggingMouseBox = true;
-                _dragStartPosition = Input.mousePosition;
-            }
-
-            if (Input.GetMouseButtonUp(0))
-            {
-                _isDraggingMouseBox = false;
-            }
-
-            if (_isDraggingMouseBox && _dragStartPosition != Input.mousePosition)
-            {
-                SelectUnitsInDraggingBox();
             }
 
             if (Input.anyKeyDown)

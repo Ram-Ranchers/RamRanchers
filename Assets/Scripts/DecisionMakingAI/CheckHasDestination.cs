@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace DecisionMakingAI
 {
     public class CheckHasDestination : Node
@@ -9,12 +7,12 @@ namespace DecisionMakingAI
             object destinationPoint = GetData("destinationPoint");
             if (destinationPoint == null)
             {
-                state = NodeState.Failure;
-                return state;
+                _state = NodeState.Failure;
+                return _state;
             }
 
-            state = NodeState.Success;
-            return state;
+            _state = NodeState.Success;
+            return _state;
         }
     }
 }

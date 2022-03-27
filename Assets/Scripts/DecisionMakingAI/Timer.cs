@@ -25,6 +25,8 @@ namespace DecisionMakingAI
             this.onTickEnded = onTickEndeed;
         }
 
+        public override bool IsFlowNode => true;
+        
         public override NodeState Evaluate()
         {
             if (!HasChildren)
@@ -35,22 +37,22 @@ namespace DecisionMakingAI
             if (_time <= 0)
             {
                 _time = _delay;
-                state = children[0].Evaluate();
+                _state = _children[0].Evaluate();
 
                 if (onTickEnded != null)
                 {
                     onTickEnded();
                 }
 
-                state = NodeState.Success;
+                _state = NodeState.Success;
             }
             else
             {
                 _time -= Time.deltaTime;
-                state = NodeState.Running;
+                _state = NodeState.Running;
             }
 
-            return state;
+            return _state;
         }
     }
 }

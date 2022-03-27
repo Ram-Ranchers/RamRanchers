@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -22,13 +21,15 @@ namespace DecisionMakingAI
         private float _minimapIndicatorStrokeWidth = 0.1f;
         private Transform _minimapIndicator;
         private Mesh _minimapIndicatorMesh;
+        private bool _placingBuilding;
         
         private void Awake()
         {
             _camera = GetComponent<Camera>();
             _forwardDir = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
-            _mouseOnScreenBorder = -1;
             _mouseOnScreenCoroutine = null;
+            _mouseOnScreenBorder = -1;
+            _placingBuilding = false;
             PrepareMapIndicator();
             groundTarget.position = Utils.MiddleOfScreenPointToWorld();
         }
@@ -64,7 +65,7 @@ namespace DecisionMakingAI
                 }
             }
 
-            if (Mathf.Abs(Input.mouseScrollDelta.y) > 0f)
+            if (!_placingBuilding && Mathf.Abs(Input.mouseScrollDelta.y) > 0f)
             {
                 Zoom(Input.mouseScrollDelta.y > 0f ? 1 : -1);
             }
@@ -187,12 +188,12 @@ namespace DecisionMakingAI
                 {
                     new Vector3(viewCorners[0].x + _minimapIndicatorStrokeWidth * w, 0f,
                         viewCorners[0].z + _minimapIndicatorStrokeWidth * h),
-                    new Vector3(viewCorners[1].x + _minimapIndicatorStrokeWidth * w, 0f,
+                    new Vector3(viewCorners[1].x - _minimapIndicatorStrokeWidth * w, 0f,
                         viewCorners[1].z + _minimapIndicatorStrokeWidth * h),
                     new Vector3(viewCorners[2].x + _minimapIndicatorStrokeWidth * w, 0f,
-                        viewCorners[2].z + _minimapIndicatorStrokeWidth * h),
-                    new Vector3(viewCorners[3].x + _minimapIndicatorStrokeWidth * w, 0f,
-                        viewCorners[3].z + _minimapIndicatorStrokeWidth * h)
+                        viewCorners[2].z - _minimapIndicatorStrokeWidth * h),
+                    new Vector3(viewCorners[3].x - _minimapIndicatorStrokeWidth * w, 0f,
+                        viewCorners[3].z - _minimapIndicatorStrokeWidth * h)
                 };
 
                 Vector3[] allCorners = new Vector3[]
@@ -215,14 +216,28 @@ namespace DecisionMakingAI
 
         private void OnEnable()
         {
+            EventManager.AddListener("PlaceBuildingOn", OnPlaceBuildingOn);
+            EventManager.AddListener("PlaceBuildingOff", OnPlaceBuildingOff);
             EventManager.AddListener("MoveCamera", OnMoveCamera);
         }
 
         private void OnDisable()
         {
+            EventManager.RemoveListener("PlaceBuildingOn", OnPlaceBuildingOn);
+            EventManager.RemoveListener("PlaceBuildingOff", OnPlaceBuildingOff);
             EventManager.RemoveListener("MoveCamera", OnMoveCamera);
         }
 
+        private void OnPlaceBuildingOn()
+        {
+            _placingBuilding = true;
+        }
+
+        private void OnPlaceBuildingOff()
+        {
+            _placingBuilding = false;
+        }
+        
         private void OnMoveCamera(object data)
         {
             Vector3 pos = (Vector3)data;

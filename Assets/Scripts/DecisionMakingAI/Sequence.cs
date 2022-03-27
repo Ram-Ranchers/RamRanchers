@@ -22,6 +22,8 @@ namespace DecisionMakingAI
             _isRandom = isRandom;
         }
 
+        public override bool IsFlowNode => true;
+        
         public static List<T> Shuffle<T>(List<T> list)
         {
             System.Random r = new System.Random();
@@ -33,29 +35,29 @@ namespace DecisionMakingAI
             bool anyChildIsRunning = false;
             if (_isRandom)
             {
-                children = Shuffle(children);
+                _children = Shuffle(_children);
             }
             
-            foreach (Node node in children)
+            foreach (Node node in _children)
             {
                 switch (node.Evaluate())
                 {
                     case NodeState.Failure:
-                        state = NodeState.Failure;
-                        return state;
+                        _state = NodeState.Failure;
+                        return _state;
                     case NodeState.Success:
                         continue;
                     case NodeState.Running:
                         anyChildIsRunning = true;
                         continue;
                     default:
-                        state = NodeState.Success;
-                        return state;
+                        _state = NodeState.Success;
+                        return _state;
                 }
             }
 
-            state = anyChildIsRunning ? NodeState.Running : NodeState.Success;
-            return state;
+            _state = anyChildIsRunning ? NodeState.Running : NodeState.Success;
+            return _state;
         }
     }
 }

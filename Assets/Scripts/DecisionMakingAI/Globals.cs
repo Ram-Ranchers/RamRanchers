@@ -20,6 +20,7 @@ namespace DecisionMakingAI
         
         public static BuildingData[] Building_Data;
         public static NavMeshSurface Nav_Mesh_Surface;
+        public static Dictionary<string, SkillData> Skill_Data = new Dictionary<string, SkillData>();
 
 		public static void UpdateNavMeshSurface()
 		{

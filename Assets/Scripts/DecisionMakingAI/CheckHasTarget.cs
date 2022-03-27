@@ -9,19 +9,19 @@ namespace DecisionMakingAI
             object currentTarget = _parent.GetData("currentTarget");
             if (currentTarget == null)
             {
-                state = NodeState.Failure;
-                return state;
+                _state = NodeState.Failure;
+                return _state;
             }
 
             if (!(Transform) currentTarget)
             {
                 _parent.ClearData("currentTarget");
-                state = NodeState.Failure;
-                return state;
+                _state = NodeState.Failure;
+                return _state;
             }
 
-            state = NodeState.Success;
-            return state;
+            _state = NodeState.Success;
+            return _state;
         }
     }
 }

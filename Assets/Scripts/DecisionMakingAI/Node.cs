@@ -10,11 +10,11 @@ namespace DecisionMakingAI
     }
     public class Node
     {
-        protected NodeState state;
-        public NodeState State => state;
+        protected NodeState _state;
+        public NodeState State => _state;
 
         public Node _parent;
-        protected List<Node> children = new List<Node>();
+        protected List<Node> _children = new List<Node>();
 
         private Dictionary<string, object> _dataContext = new Dictionary<string, object>(); 
 
@@ -40,13 +40,13 @@ namespace DecisionMakingAI
         
         public void Attach(Node child)
         {
-            children.Add(child);
+            _children.Add(child);
             child._parent = this;
         }
 
         public void Detach(Node child)
         {
-            children.Remove(child);
+            _children.Remove(child);
             child._parent = null;
         }
 
@@ -102,7 +102,8 @@ namespace DecisionMakingAI
         }
 
         public Node Parent => _parent;
-        public List<Node> Children => children;
-        public bool HasChildren => children.Count > 0;
+        public List<Node> Children => _children;
+        public bool HasChildren => _children.Count > 0;
+        public virtual bool IsFlowNode => false;
     }
 }

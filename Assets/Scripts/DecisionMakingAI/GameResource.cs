@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace DecisionMakingAI
 {
     public class GameResource
@@ -24,5 +22,18 @@ namespace DecisionMakingAI
 
         public string Name => _name;
         public int Amount => _currentAmount;
+    }
+
+    [System.Serializable]
+    public class ResourceValue
+    {
+        public InGameResource code;
+        public int amount = 0;
+
+        public ResourceValue(InGameResource code, int amount)
+        {
+            this.code = code;
+            this.amount = amount;
+        }
     }
 }

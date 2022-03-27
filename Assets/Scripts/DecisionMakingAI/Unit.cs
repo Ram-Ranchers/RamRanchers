@@ -23,11 +23,12 @@ namespace DecisionMakingAI
 
         public Unit(UnitData data, int owner, List<ResourceValue> production)
         {
+            _uid = System.Guid.NewGuid().ToString();
             _data = data;
             _currentHealth = data.healthpoints;
-            _uid = System.Guid.NewGuid().ToString();
             _level = 1;
             _production = production.ToDictionary(rv => rv.code, rv => rv.amount);
+            _fieldOfView = data.fieldOfView;
             _owner = owner;
             
             GameObject g = GameObject.Instantiate(data.prefab) as GameObject;
@@ -42,8 +43,7 @@ namespace DecisionMakingAI
                 sm.Initialise(skill, g);
                 _skillManagers.Add(sm);
             }
-
-            _fieldOfView = data.fieldOfView;
+            
             _transform.GetComponent<UnitManager>().Initialise(this);
         }
 
@@ -77,11 +77,6 @@ namespace DecisionMakingAI
             {
                 _transform.GetComponent<UnitManager>().EnableFOV(_fieldOfView);
 
-                if (_production.Count > 0)
-                {
-                    GameManager.instance.ownedProducingUnits.Add(this);
-                }
-                
                 foreach (ResourceValue resource in _data.cost)
                 {
                     Globals.Game_Resources[resource.code].AddAmount(-resource.amount);
@@ -133,7 +128,7 @@ namespace DecisionMakingAI
 
             if (_data.canProduce.Contains(InGameResource.Stone))
             {
-                int rockScore = Physics.OverlapSphere(pos, globalParams.woodProductionRange, Globals.Rock_Mask)
+                int rockScore = Physics.OverlapSphere(pos, globalParams.stoneProductionRange, Globals.Rock_Mask)
                     .Select((c) => globalParams.stoneProductionFunc(Vector3.Distance(pos, c.transform.position))).Sum();
                 _production[InGameResource.Stone] = rockScore;
             }
@@ -158,12 +153,4 @@ namespace DecisionMakingAI
         public List<SkillManager> SkillManagers => _skillManagers;
         public int Owner => _owner;
     }
-
-        // public virtual void Place()
-        // {
-        //     if (owner == GameManager.instance.gamePlayersPatameters.myPlayerId)
-        //     {
-        //         
-        //     }
-        // }
 }
