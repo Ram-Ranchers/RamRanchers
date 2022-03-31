@@ -17,6 +17,9 @@ namespace DecisionMakingAI
         {
             SpawnBuilding(GameManager.instance.gameGlobalParameters.initialBuilding,
                 GameManager.instance.gamePlayersParameters.myPlayerId, GameManager.instance.startPosition);
+            
+            SpawnBuilding(GameManager.instance.gameGlobalParameters.initialBuilding,
+                0, new Vector3(300, 0, 300));
         }
 
         private void Update()
