@@ -17,8 +17,16 @@ MonoBehaviour:
   description: A basic unit
   healthpoints: 30
   prefab: {fileID: 3274693833840558533, guid: 52800064ed936f94c84b88fa97bb8237, type: 3}
+  sprite: {fileID: 0}
   cost:
-  - code: gold
+  - code: 0
     amount: 30
   skills: []
   fieldOfView: 22
+  canProduce: 
+  attackRange: 2
+  attackDamage: 20
+  attackRate: 1
+  onSelectSound: {fileID: 0}
+  onMoveValidSound: {fileID: 0}
+  onMoveInvalidSound: {fileID: 0}

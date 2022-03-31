@@ -17,12 +17,19 @@ MonoBehaviour:
   description: A defensive tower
   healthpoints: 50
   prefab: {fileID: 8419723006886340067, guid: 965053fdf3332f043bd17f166e1c19f5, type: 3}
+  sprite: {fileID: 0}
   cost:
-  - code: gold
+  - code: 0
     amount: 80
-  - code: wood
+  - code: 0
     amount: 80
-  - code: stone
+  - code: 0
     amount: 100
   skills: []
   fieldOfView: 35
+  canProduce: 01000000
+  attackRange: 0
+  attackDamage: 0
+  attackRate: 0
+  onSelectSound: {fileID: 0}
+  ambientSound: {fileID: 0}

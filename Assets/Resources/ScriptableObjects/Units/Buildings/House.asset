@@ -17,11 +17,18 @@ MonoBehaviour:
   description: A basic house
   healthpoints: 100
   prefab: {fileID: 8419723006886340067, guid: 37375add2ec951048b8074fa26c40400, type: 3}
+  sprite: {fileID: 0}
   cost:
-  - code: gold
+  - code: 0
     amount: 100
-  - code: wood
+  - code: 0
     amount: 120
   skills:
   - {fileID: 11400000, guid: 55b1b8818dfeab849be5a1f5ccf5acd1, type: 2}
   fieldOfView: 35
+  canProduce: 000000000100000002000000
+  attackRange: 10
+  attackDamage: 5
+  attackRate: 2
+  onSelectSound: {fileID: 0}
+  ambientSound: {fileID: 0}
