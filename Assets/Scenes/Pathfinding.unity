@@ -346,7 +346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c218b4c85439d634cb83b5549da5014e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayGridGizmos: 0
+  displayGridGizmos: 1
   player: {fileID: 2114998151}
   gridWorldSize: {x: 50, y: 50}
   nodeRadius: 1

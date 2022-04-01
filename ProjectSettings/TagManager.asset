@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Terrain
   - Unit
+  - Ram
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - Unit
   - Tree
   - Rock
-  - 
+  - Unwalkable
   - 
   - 
   - 
