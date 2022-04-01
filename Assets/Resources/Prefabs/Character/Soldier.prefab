@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 1343320305129738007}
   - component: {fileID: 5989179317719624475}
   - component: {fileID: -2736772113226939873}
-  m_Layer: 0
+  - component: {fileID: -483574701417000064}
+  m_Layer: 11
   m_Name: Soldier
-  m_TagString: Untagged
+  m_TagString: Unit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -80,6 +81,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionCircle: {fileID: 8920031026518779284}
   fov: {fileID: 3776560056951177072}
+  contextualSource: {fileID: 0}
+  ownerMaterialSlotIndex: 0
   agent: {fileID: -2736772113226939873}
 --- !u!195 &-2736772113226939873
 NavMeshAgent:
@@ -103,6 +106,18 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &-483574701417000064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3274693833840558533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fe77ce288b21cc4db89d3fdb1e70940, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3776560056951177072
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,7 +211,7 @@ GameObject:
   - component: {fileID: 6252572860228464199}
   - component: {fileID: 4607527070882510306}
   - component: {fileID: 7674745772965052383}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,7 +292,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2952453318812646662}
   - component: {fileID: 4225672169095395702}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SelectionCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

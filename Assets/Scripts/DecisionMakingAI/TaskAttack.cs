@@ -1,62 +1,22 @@
-using RTS;
 using UnityEngine;
 
 namespace DecisionMakingAI
 {
     public class TaskAttack : Node
     {
-        private Transform _lastTarget;
-        private EnemyManager _enemyManager;
+        private UnitManager _manager;
 
-        private float _attackTime = 1f;
-        private float _attackCounter = 0f;
-
-       //private UnitManager _manager;
-
-       //public TaskAttack(UnitManager manager) : base()
-       //{
-       //    _manager = manager;
-       //}
-       //
-       //public override NodeState Evaluate()
-       //{
-       //    object currentTarget = GetData("currentTarget");
-       //    _manager.Attack((Transform) currentTarget);
-       //    state = NodeState.Success;
-       //    return state;
-       //}
-        
-        public TaskAttack(Transform transform)
+        public TaskAttack(UnitManager manager) : base()
         {
-            _lastTarget = transform;
+            _manager = manager;
         }
 
         public override NodeState Evaluate()
         {
-            Transform target = (Transform)GetData("target");
-
-            if (target != _lastTarget)
-            {
-               _enemyManager = target.GetComponent<EnemyManager>();
-               _lastTarget = target;
-            }
-
-            _attackCounter += Time.deltaTime;
-            if (_attackCounter >= _attackTime)
-            {
-               bool enemyIsDead = _enemyManager.TakeHit();
-               if (enemyIsDead)
-               {
-                   ClearData("target");
-               }
-               else
-               {
-                   _attackCounter = 0f;   
-               }
-            }
-            
-            state = NodeState.Running;
-            return state;
+            object currentTarget = GetData("currentTarget");
+            _manager.Attack((Transform)currentTarget);
+            _state = NodeState.Success;
+            return _state;
         }
     }
 }

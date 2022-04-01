@@ -9,18 +9,48 @@ namespace DecisionMakingAI
     {
         private BuildingPlacer _buildingPlacer;
         
+        public Color invalidTextColour;
+        
+        [Header("Building")]
         public Transform buildingMenu;
         public GameObject buildingButtonPrefab;
+        
+        [Header("GameResources")]
         public Transform resourcesUIParent;
         public GameObject gameResourcesDisplayPrefab;
         public GameObject gameResourceCostPrefab;
+        
+        [Header("Info Panel")]
         public GameObject infoPanel;
-        public Color invalidTextColour;
+        private Text _infoPanelTitleText;
+        private Text _infoPanelDescriptionText;
+        private Transform _infoPanelResourcesCostParent;
+        
+        [Header("Units Selection")]
+        public GameObject selectedUnitMenu;
+        public GameObject selecteUnitMenuUpgradeButton;
+        public GameObject selecteUnitMenuDestroyButton;
+        private RectTransform _selectedUnitContentRectTransform;
+        private RectTransform _selectedUnitButtonsRectTransform;
+        private Text _selectedUnitTitleText;
+        private Text _selectedUnitLevelText;
+        private Transform _selectedUnitResourcesProductionParent;
+        private Transform _selectedUnitActionButtonsParent;
+        private Unit _selectedUnit;
+        public GameObject unitSkillButtonPrefab;
+
+        public Transform selectionGroupsParent;
+        
         public Transform selectedUnitsListParent;
         public GameObject selectedUnitDisplayPrefab;
-        public Transform selectionGroupsParent;
-        public GameObject selectedUnitMenu;
-        public GameObject unitSkillButtonPrefab;
+
+        private Dictionary<string, Button> _buildingButtons;
+        private Dictionary<InGameResource, Text> _resourceTexts;
+
+        [Header("Placed Building Production")] 
+        public RectTransform PlacedBuildingProductionTransform;
+        
+        [Header("Game Settings Panel")]
         public GameObject gameSettingsPanel;
         public Transform gameSettingsMenusParent;
         public Text gameSettingsContentName;
@@ -29,63 +59,20 @@ namespace DecisionMakingAI
         public GameObject gameSettingsParameterPrefab;
         public GameObject sliderPrefab;
         public GameObject togglePrefab;
-
-        private Text _infoPanelTitleText;
-        private Text _infoPanelDescriptionText;
-        private Transform _infoPanelResourcesCostParent;
-        private Dictionary<string, Text> _resourceTexts;
-        private Dictionary<string, Button> _buildingButtons;
-        private RectTransform _selectedUnitContentRectTransform;
-        private RectTransform _selectedUnitButtonsRectTransform;
-        private Text _selectedUnitTitleText;
-        private Text _selectedUnitLevelText;
-        private Transform _selectedUnitResourcesProductionParent;
-        private Transform _selectedUnitActionButtonsParent;
-        private Unit _selectedUnit;
         private Dictionary<string, GameParameters> _gameParameters;
 
+        [Header("Main Menu Panel")] 
+        public GameObject mainMenuPanel;
+        
         private void Awake()
         {
-            _resourceTexts = new Dictionary<string, Text>();
-            foreach (KeyValuePair<string, GameResource> pair in Globals.Game_Resources)
-            {
-                GameObject display = Instantiate(gameResourcesDisplayPrefab, resourcesUIParent);
-                display.name = pair.Key;
-                _resourceTexts[pair.Key] = display.transform.Find("Text").GetComponent<Text>();
-                SetResourceText(pair.Key, pair.Value.Amount);
-            }
-
-            _buildingButtons = new Dictionary<string, Button>();
             _buildingPlacer = GetComponent<BuildingPlacer>();
 
-            for (int i = 0; i < Globals.Building_Data.Length; i++)
-            {
-                BuildingData data = Globals.Building_Data[i];
-                GameObject button = Instantiate(buildingButtonPrefab, buildingMenu);
-                button.name = data.unitname;
-                button.transform.Find("Text").GetComponent<Text>().text = data.unitname;
-                Button b = button.GetComponent<Button>();
-                _buildingButtons[data.code] = b;
-                AddBuildingButtonListener(b, i);
-                button.GetComponent<BuildingButton>().Initialise(Globals.Building_Data[i]);
-                
-                if (!Globals.Building_Data[i].CanBuy())
-                {
-                    b.interactable = false;
-                }
-            }
-
-            Transform infoPanelTransfrom = infoPanel.transform;
-            _infoPanelTitleText = infoPanelTransfrom.Find("Content/Title").GetComponent<Text>();
-            _infoPanelDescriptionText = infoPanelTransfrom.Find("Content/Description").GetComponent<Text>();
-            _infoPanelResourcesCostParent = infoPanelTransfrom.Find("Content/ResourcesCost");
-            ShowInfoPanel(false);
-
-            for (int i = 1; i <= 9; i++)
-            {
-                ToggleSelectionGroupButton(i, false);
-            }
-
+            Transform infoPanelTransform = infoPanel.transform;
+            _infoPanelTitleText = infoPanelTransform.Find("Content/Title").GetComponent<Text>();
+            _infoPanelDescriptionText = infoPanelTransform.Find("Content/Description").GetComponent<Text>();
+            _infoPanelResourcesCostParent = infoPanelTransform.Find("Content/ResourcesCost");
+            
             Transform selectedUnitMenuTransform = selectedUnitMenu.transform;
             _selectedUnitContentRectTransform = selectedUnitMenuTransform.Find("Content").GetComponent<RectTransform>();
             _selectedUnitButtonsRectTransform = selectedUnitMenuTransform.Find("Buttons").GetComponent<RectTransform>();
@@ -93,16 +80,66 @@ namespace DecisionMakingAI
             _selectedUnitLevelText = selectedUnitMenuTransform.Find("Content/Level").GetComponent<Text>();
             _selectedUnitResourcesProductionParent = selectedUnitMenuTransform.Find("Content/ResourcesProduction");
             _selectedUnitActionButtonsParent = selectedUnitMenuTransform.Find("Buttons/SpecificActions");
-
-            ShowSelectedUnitMenu(false);
+            
+            PlacedBuildingProductionTransform.gameObject.SetActive(false);
             
             gameSettingsPanel.SetActive(false);
+            
             GameParameters[] gameParametersList = Resources.LoadAll<GameParameters>("ScriptableObjects/Parameters");
             _gameParameters = new Dictionary<string, GameParameters>();
             foreach (GameParameters p in gameParametersList)
             {
                 _gameParameters[p.GetParametersName()] = p;
                 SetupGameSettingsPanel();
+            }
+            
+            mainMenuPanel.SetActive(false);
+            
+            _resourceTexts = new Dictionary<InGameResource, Text>();
+            foreach (KeyValuePair<InGameResource, GameResource> pair in Globals.Game_Resources)
+            {
+                GameObject display = Instantiate(gameResourcesDisplayPrefab);
+                display.name = pair.Key.ToString();
+                _resourceTexts[pair.Key] = display.transform.Find("Text").GetComponent<Text>();
+                display.transform.Find("Icon").GetComponent<Image>().sprite =
+                    Resources.Load<Sprite>($"Textures/GameResources/{pair.Key}");
+                SetResourceText(pair.Key, pair.Value.Amount);
+                display.transform.SetParent(resourcesUIParent);
+            }
+
+            _buildingButtons = new Dictionary<string, Button>();
+            for (int i = 0; i < Globals.Building_Data.Length; i++)
+            {
+                BuildingData data = Globals.Building_Data[i];
+                GameObject button = Instantiate(buildingButtonPrefab);
+                button.name = data.unitname;
+                if (data.sprite != null)
+                {
+                    //button.transform.Find("Icon").GetComponent<Image>().sprite = data.sprite;
+                    button.transform.Find("Text").gameObject.SetActive(false);
+                }
+                else
+                {
+                    //button.transform.Find("Icon").gameObject.SetActive(false);
+                    button.transform.Find("Text").GetComponent<Text>().text = data.unitname;
+                }
+                Button b = button.GetComponent<Button>();
+                AddBuildingButtonListener(b, i);
+                button.transform.SetParent(buildingMenu);
+                _buildingButtons[data.code] = b;
+                if (!Globals.Building_Data[i].CanBuy())
+                {
+                    b.interactable = false;
+                }
+                button.GetComponent<BuildingButton>().Initialise(Globals.Building_Data[i]);
+            }
+            
+            ShowInfoPanel(false);
+            ShowSelectedUnitMenu(false);
+            
+            for (int i = 1; i <= 9; i++)
+            {
+                ToggleSelectionGroupButton(i, false);
             }
         }
 
@@ -135,7 +172,7 @@ namespace DecisionMakingAI
         {
             b.onClick.AddListener(() => SetGameSettingsContent(menu));
         }
-
+        
         private void SetGameSettingsContent(string menu)
         {
             gameSettingsContentName.text = menu;
@@ -192,8 +229,9 @@ namespace DecisionMakingAI
                     }
                 }
 
+                gWrapper.transform.SetParent(gameSettingsContentParent);
                 rtWrapper = gWrapper.GetComponent<RectTransform>();
-                rtWrapper.anchoredPosition = new Vector2(0f, -i * fieldHeight);
+                rtWrapper.anchoredPosition = new Vector2(1f, -i * fieldHeight);
                 rtWrapper.sizeDelta = new Vector2(contentWidth, fieldHeight);
 
                 if (gEditor != null)
@@ -247,14 +285,42 @@ namespace DecisionMakingAI
             EventManager.TriggerEvent(showGameSettingsPanel ? "PauseGame" : "ResumeGame");
         }
         
-        private void SetResourceText(string resource, int value)
+        public void ToggelMainMenuPanel()
+        {
+            bool showMainMenuPanel = !mainMenuPanel.activeSelf;
+            mainMenuPanel.SetActive(showMainMenuPanel);
+            EventManager.TriggerEvent(showMainMenuPanel ? "PauseGame" : "ResumeGame");
+        }
+
+        public void LoadGame()
+        {
+            
+        }
+
+        public void SaveGame()
+        {
+            
+        }
+
+        public void ResumeGame()
+        {
+            mainMenuPanel.SetActive(false);
+            EventManager.TriggerEvent("ResumeGame");
+        }
+
+        public void QuitGame()
+        {
+            Application.Quit();
+        }
+        
+        private void SetResourceText(InGameResource resource, int value)
         {
             _resourceTexts[resource].text = value.ToString();
         }
 
         public void OnUpdateResourceTexts()
         {
-            foreach (KeyValuePair<string, GameResource> pair in Globals.Game_Resources)
+            foreach (KeyValuePair<InGameResource, GameResource> pair in Globals.Game_Resources)
             {
                 SetResourceText(pair.Key, pair.Value.Amount);
             }
@@ -281,6 +347,9 @@ namespace DecisionMakingAI
             EventManager.AddListener("UnhoverBuildingButton", OnUnhoverBuildingButton);
             EventManager.AddListener("SelectUnit", OnSelectUnit);
             EventManager.AddListener("DeselectUnit", OnDeselectUnit);
+            EventManager.AddListener("UpdatePlacedBuildingProduction", OnUpdatePlacedBuildingProduction);
+            EventManager.AddListener("PlaceBuildingOn", OnPlaceBuildingOn);
+            EventManager.AddListener("PlaceBuildingOff", OnPlaceBuildingOff);
         }
 
         private void OnDisable()
@@ -291,8 +360,50 @@ namespace DecisionMakingAI
             EventManager.RemoveListener("UnhoverBuildingButton", OnUnhoverBuildingButton);
             EventManager.RemoveListener("SelectUnit", OnSelectUnit);
             EventManager.RemoveListener("DeselectUnit", OnDeselectUnit);
+            EventManager.RemoveListener("UpdatePlacedBuildingProduction", OnUpdatePlacedBuildingProduction);
+            EventManager.RemoveListener("PlaceBuildingOn", OnPlaceBuildingOn);
+            EventManager.RemoveListener("PlaceBuildingOff", OnPlaceBuildingOff);
         }
 
+        private void OnUpdatePlacedBuildingProduction(object data)
+        {
+            object[] values = (object[])data;
+            Dictionary<InGameResource, int> production = (Dictionary<InGameResource, int>)values[0];
+            Vector3 pos = (Vector3)values[1];
+
+            foreach (Transform child in PlacedBuildingProductionTransform.gameObject.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            GameObject g;
+            Transform t;
+            foreach (KeyValuePair<InGameResource, int> pair in production)
+            {
+                g = Instantiate(gameResourceCostPrefab) as GameObject;
+                t = g.transform;
+                t.Find("Text").GetComponent<Text>().text = $"+{pair.Value}";
+                t.Find("Icon").GetComponent<Image>().sprite =
+                    Resources.Load<Sprite>($"Textures/GameResources/{pair.Key}");
+                t.SetParent(PlacedBuildingProductionTransform.transform);
+            }
+
+            PlacedBuildingProductionTransform.sizeDelta = new Vector2(80, 24 * production.Count);
+
+            PlacedBuildingProductionTransform.anchoredPosition = (Vector2)Camera.main.WorldToScreenPoint(pos) +
+                                                                 Vector2.right * 40f + Vector2.up * 10f;
+        }
+
+        private void OnPlaceBuildingOn()
+        {
+            PlacedBuildingProductionTransform.gameObject.SetActive(true);
+        }
+
+        private void OnPlaceBuildingOff()
+        {
+            PlacedBuildingProductionTransform.gameObject.SetActive(false);
+        }
+        
         private void OnSelectUnit(object data)
         {
             Unit unit = (Unit)data;
@@ -317,8 +428,12 @@ namespace DecisionMakingAI
 
         private void SetSelectedUnitMenu(Unit unit)
         {
+            _selectedUnit = unit;
+
+            bool unitIsMine = unit.Owner == GameManager.instance.gamePlayersParameters.myPlayerId;
+            
             // Adapt content panel heights to match info to display
-            int contentHeight = 60 + unit.Production.Count * 16;
+            int contentHeight = unitIsMine ? 60 + unit.Production.Count * 16 : 60;
             _selectedUnitContentRectTransform.sizeDelta = new Vector2(64, contentHeight);
             _selectedUnitButtonsRectTransform.anchoredPosition = new Vector2(0, -contentHeight - 20);
             _selectedUnitButtonsRectTransform.sizeDelta = new Vector2(70, Screen.height - contentHeight - 20);
@@ -333,21 +448,19 @@ namespace DecisionMakingAI
                 Destroy(child.gameObject);
             }
 
-            if (unit.Production.Count > 0)
+            if (unitIsMine && unit.Production.Count > 0)
             {
-                GameObject g;
-                Transform t;
-                foreach (ResourceValue resource in unit.Production)
+                GameObject g; Transform t;
+                foreach (KeyValuePair<InGameResource, int> resource in unit.Production)
                 {
-                    g = GameObject.Instantiate(gameResourceCostPrefab, _selectedUnitResourcesProductionParent);
+                    g = Instantiate(gameResourceCostPrefab);
                     t = g.transform;
-                    t.Find("Text").GetComponent<Text>().text = $"+{resource.amount}";
+                    t.Find("Text").GetComponent<Text>().text = $"+{resource.Value}";
                     t.Find("Icon").GetComponent<Image>().sprite =
-                        Resources.Load<Sprite>($"Textures/GameResources/{resource.code}");
+                        Resources.Load<Sprite>($"Textures/GameResources/{resource.Key}");
+                    t.SetParent(_selectedUnitResourcesProductionParent);
                 }
             }
-
-            _selectedUnit = unit;
             
             // Clear skills and reinstantiate new ones
             foreach (Transform child in _selectedUnitActionButtonsParent)
@@ -355,21 +468,25 @@ namespace DecisionMakingAI
                 Destroy(child.gameObject);
             }
 
-            if (unit.SkillManagers.Count > 0)
+            if (unitIsMine && unit.SkillManagers.Count > 0)
             {
                 GameObject g;
                 Transform t;
                 Button b;
                 for (int i = 0; i < unit.SkillManagers.Count; i++)
                 {
-                    g = GameObject.Instantiate(unitSkillButtonPrefab, _selectedUnitActionButtonsParent);
+                    g = Instantiate(unitSkillButtonPrefab);
                     t = g.transform;
                     b = g.GetComponent<Button>();
                     unit.SkillManagers[i].SetButton(b);
                     t.Find("Text").GetComponent<Text>().text = unit.SkillManagers[i].skill.skillName;
+                    t.SetParent(_selectedUnitActionButtonsParent);
                     AddUnitSkillButtonListener(b, i);
                 }
             }
+            
+            selecteUnitMenuUpgradeButton.SetActive(unitIsMine);
+            selecteUnitMenuDestroyButton.SetActive(unitIsMine);
         }
 
         private void AddUnitSkillButtonListener(Button b, int i)
@@ -393,11 +510,12 @@ namespace DecisionMakingAI
             }
             else
             {
-                GameObject g = GameObject.Instantiate(selectedUnitDisplayPrefab, selectedUnitsListParent);
+                GameObject g = Instantiate(selectedUnitDisplayPrefab);
                 g.name = unit.Code;
                 Transform t = g.transform;
                 t.Find("Count").GetComponent<Text>().text = "1";
                 t.Find("Name").GetComponent<Text>().text = unit.Data.unitname;
+                t.SetParent(selectedUnitsListParent);
             }
         }
 
@@ -437,9 +555,9 @@ namespace DecisionMakingAI
         public void SetInfoPanel(UnitData data)
         {
             // Update texts
-            if (data.code != "")
+            if (data.unitname != "")
             {
-                _infoPanelTitleText.text = data.code;
+                _infoPanelTitleText.text = data.unitname;
             }
 
             if (data.description != "")
@@ -458,7 +576,7 @@ namespace DecisionMakingAI
                 GameObject g; Transform t;
                 foreach (ResourceValue resource in data.cost)
                 {
-                    g = GameObject.Instantiate(gameResourceCostPrefab, _infoPanelResourcesCostParent);
+                    g = Instantiate(gameResourceCostPrefab) as GameObject;
                     t = g.transform;
                     t.Find("Text").GetComponent<Text>().text = resource.amount.ToString();
                     t.Find("Icon").GetComponent<Image>().sprite =
@@ -467,6 +585,8 @@ namespace DecisionMakingAI
                     {
                         t.Find("Text").GetComponent<Text>().color = invalidTextColour;
                     }
+                    
+                    t.SetParent(_infoPanelResourcesCostParent);
                 }
             }
         }
@@ -475,48 +595,5 @@ namespace DecisionMakingAI
         {
             infoPanel.SetActive(show);
         }
-        
-        //[Header("Unit Selection")] 
-        //public GameObject selecteUnitMenuUpgradeButton;
-        //public GameObject selecteUnitMenuDestroyButton;
-
-        //public void SetSelectedUnitMenu(Unit unit)
-        //{
-        //    _selectedUnit = unit;
-
-        //    bool unitIsMine = unit.Owner == GameManager.instance.gamePlayersParameters.myPlayerId;
-
-        //    int contentHeight = unitIsMine ? 60 + unit.Production.count * 16 : 60;
-        //    _selectedUnitContentRectTransform.sizeDelta = new Vector2(64, contentHeight);
-        //    _selectedUnitButtonsRectTransform.anchordPosition = new Vector2(0, -contentHeight - 20);
-        //    _selectedUnitButtonsRectTransform.sizeDelta = new Vector2(70, Screen.height - contentHeight - 20);
-
-        //    _selectedUnitTitleText.text = unit.Data.unitName;
-        //    _selectedUnitLevelText.text = $"Level {unit.Level}";
-
-        //    foreach (Transform child in _selectedUnitResourcesProductionParent)
-        //    {
-        //        Destroy(child.gameObject);
-        //    }
-
-        //    if (unitIsMine && unit.Production.count > 0)
-        //    {
-        //        GameObject g;
-        //        Transform t;
-        //        foreach (KeyValuePair<InGameREsource, int> resource in unit.Production)
-        //        {
-        //            g = Instantiate(gameResourceCostPrefab);
-        //            t = g.transform;
-        //            t.Find("Text").GetComponent<Text>().text = $"+{resource.Value}";
-        //            t.Find("Icon").GetComponent<Image>().sprite =
-        //                Resources.Load<Sprite>($"Textures/GameResources/{resource.Key}");
-        //            t.SetParent(_selectedUnitActionButtonsParent);
-        //            AddUnitSkillButtonListener(b, i);
-        //        }
-        //    }
-
-        //    selecteUnitMenuUpgradeButton.SetActive(unitIsMine);
-        //    selecteUnitMenuDestroyButton.SetActive(unitIsMine);
-        // }
     }
 }

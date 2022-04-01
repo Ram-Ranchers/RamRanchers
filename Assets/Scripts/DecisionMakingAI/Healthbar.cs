@@ -13,7 +13,8 @@ namespace DecisionMakingAI
         private float _yOffset;
         private Transform _camera;
         private Vector3 _lastCameraPosition;
-
+        private bool _reupdate;
+        
         private void Awake()
         {
             _camera = Camera.main.transform;
@@ -21,7 +22,7 @@ namespace DecisionMakingAI
 
         private void Update()
         {
-            if ( _lastCameraPosition == _camera.position && _target && _lastTargetPosition == _target.position)
+            if ( _lastCameraPosition == _camera.position && !_reupdate || _target && _lastTargetPosition == _target.position)
             {
                 return;
             }
@@ -29,9 +30,10 @@ namespace DecisionMakingAI
             SetPosition();
         }
 
-        public void Initialise(Transform target, float yOffset)
+        public void Initialise(Transform target, bool reupdate,float yOffset)
         {
             _target = target;
+            _reupdate = reupdate;
             _yOffset = yOffset;
         }
 
@@ -45,8 +47,8 @@ namespace DecisionMakingAI
             _pos = Camera.main.WorldToScreenPoint(_target.position);
             _pos.y += _yOffset;
             rectTransform.anchoredPosition = _pos;
-            _lastTargetPosition = _target.position;
             _lastCameraPosition = _camera.position;
+            _lastTargetPosition = _target.position;
         }
     }
 }

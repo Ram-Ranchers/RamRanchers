@@ -11,10 +11,17 @@ namespace DecisionMakingAI
         public string description;
         public int healthpoints;
         public GameObject prefab;
+        public Sprite sprite;
         public List<ResourceValue> cost;
         public List<SkillData> skills = new List<SkillData>();
         public float fieldOfView;
+        public InGameResource[] canProduce;
 
+        [Header("Attack")] 
+        public float attackRange;
+        public int attackDamage;
+        public float attackRate;
+        
         [Header("General Sounds")] 
         public AudioClip onSelectSound;
         

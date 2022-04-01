@@ -4,16 +4,15 @@ namespace DecisionMakingAI
     {
         private bool _unitIsMine;
 
-        //public CheckUnitIsMine(UnitManager manager) : base()
-        //{
-        //    _unitIsMine = manager.Unit.Owner == GameManagerDependencyInfo.instance.gamePlayersParameters.myPlayerId;
-        //}
+        public CheckUnitIsMine(UnitManager manager) : base()
+        {
+            _unitIsMine = manager.Unit.Owner == GameManager.instance.gamePlayersParameters.myPlayerId;
+        }
 
         public override NodeState Evaluate()
         {
-            state = _unitIsMine ? NodeState.Success : NodeState.Failure;
-            return state;
+            _state = _unitIsMine ? NodeState.Success : NodeState.Failure;
+            return _state;
         }
-        
     }
 }

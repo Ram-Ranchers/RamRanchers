@@ -17,9 +17,7 @@ namespace DecisionMakingAI
             starsTransform.rotation = Quaternion.Euler(GameManager.instance.gameGlobalParameters.dayInitialRatio * 360f, -30f, 0f);
             _starsRefreshRate = 0.1f;
             _rotationAxis = starsTransform.right;
-            _rotationAngleStep = 360f * _starsRefreshRate / GameManager.instance.gameGlobalParameters.dayLengthInSeconds;
-            
-            StartCoroutine("UpdateStars");
+            _rotationAngleStep = 360f * _starsRefreshRate / GameManager.instance.gameGlobalParameters.dayLengthInSeconds; 
 
             if (!GameManager.instance.gameIsPaused)
             {

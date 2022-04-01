@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 6844090649915199659}
   - component: {fileID: 7380721840728135028}
   - component: {fileID: 5236867135224317599}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -174,7 +174,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8535527762023563893}
   - component: {fileID: 6258817005651827005}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SelectionCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -226,7 +226,8 @@ GameObject:
   - component: {fileID: 3436404433451165298}
   - component: {fileID: 271432413189960804}
   - component: {fileID: 3776408888624484014}
-  m_Layer: 0
+  - component: {fileID: 2676882590457377206}
+  m_Layer: 11
   m_Name: House
   m_TagString: Unit
   m_Icon: {fileID: 0}
@@ -293,3 +294,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionCircle: {fileID: 6885010954050573524}
   fov: {fileID: 1223639645616986487}
+  contextualSource: {fileID: 0}
+  ownerMaterialSlotIndex: 0
+  ambientSource: {fileID: 0}
+--- !u!114 &2676882590457377206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8419723006886340067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e3ed6799f797904f85810c23f2bc1f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

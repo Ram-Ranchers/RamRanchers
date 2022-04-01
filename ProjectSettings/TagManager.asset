@@ -14,13 +14,13 @@ TagManager:
   - Water
   - UI
   - Enemy
-  - Unwalkable
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Terrain
+  - FOV
+  - FlatTerrain
+  - Minimap
+  - Unit
+  - Tree
+  - Rock
   - 
   - 
   - 

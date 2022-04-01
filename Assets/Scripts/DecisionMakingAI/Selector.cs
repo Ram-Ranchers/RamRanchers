@@ -7,27 +7,29 @@ namespace DecisionMakingAI
         public Selector() : base() {}
         public Selector(List<Node> children) : base(children) {}
 
+        public override bool IsFlowNode => true;
+        
         public override NodeState Evaluate()
         {
-            foreach (Node node in children)
+            foreach (Node node in _children)
             {
                 switch (node.Evaluate())
                 {
                     case NodeState.Failure:
                         continue;
                     case NodeState.Success:
-                        state = NodeState.Success;
-                        return state;
+                        _state = NodeState.Success;
+                        return _state;
                     case NodeState.Running:
-                        state = NodeState.Running;
-                        return state;
+                        _state = NodeState.Running;
+                        return _state;
                     default:
                         continue;
                 }
             }
 
-            state = NodeState.Failure;
-            return state;
+            _state = NodeState.Failure;
+            return _state;
         }
     }
 }

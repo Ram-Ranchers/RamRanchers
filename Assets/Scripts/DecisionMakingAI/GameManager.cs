@@ -1,4 +1,5 @@
-using System;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEngine;
 
@@ -7,72 +8,29 @@ namespace DecisionMakingAI
     public class GameManager : MonoBehaviour
     {
         public static GameManager instance;
-        public Vector3 startPosition;
         public GameGlobalParameters gameGlobalParameters;
         public GameObject fov;
         public GamePlayersParameters gamePlayersParameters;
-        
-        [HideInInspector] 
+
+        [HideInInspector]
         public bool gameIsPaused;
-        
-        private Ray _ray;
-        private RaycastHit _raycastHit;
-        
+        public Vector3 startPosition;
+        public float _producingRate = 3f;
+
         private void Awake()
         {
             DataHandler.LoadGameData();
+            GetComponent<DayAndNightCycler>().enabled = gameGlobalParameters.enableDayAndNightCycle;
 			Globals.Nav_Mesh_Surface = GameObject.Find("Plane").GetComponent<NavMeshSurface>();
 			Globals.UpdateNavMeshSurface();
-            GetComponent<DayAndNightCycler>().enabled = gameGlobalParameters.enableDayAndNightCycle;
-            GameObject.Find("FogOfWar").SetActive(gameGlobalParameters.enableFOV);
+            fov.SetActive(gameGlobalParameters.enableFOV);
             GetStartPosition();
             gameIsPaused = false;
-            fov.SetActive(gameGlobalParameters.enableFOV);
         }
 
         public void Start()
         {
             instance = this;
-
-            GameParameters[] gameParametersList = Resources.LoadAll<GameParameters>("ScriptableObjects/Parameters");
-
-            foreach (GameParameters parameters in gameParametersList)
-            {
-                Debug.Log(parameters.GetParametersName());
-                Debug.Log("> Fields shown in-game:");
-                foreach (string fieldName in parameters.FieldsToShowInGame)
-                {
-                    Debug.Log($"     {fieldName}");
-                }
-            }
-        }
-
-        private void Update()
-        {
-            if (gameIsPaused)
-            {
-                return;
-            }
-            
-            CheckUnitsNavigation();
-        }
-
-        private void CheckUnitsNavigation()
-        {
-            if (Globals.Selected_Units.Count > 0 && Input.GetMouseButtonUp(1))
-            {
-                _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(_ray, out _raycastHit, 1000f, Globals.Terrain_Layer_Mask))
-                {
-                    foreach (UnitManager um in Globals.Selected_Units)
-                    {
-                        if (um.GetType() == typeof(CharacterManager))
-                        {
-                            ((CharacterManager)um).MoveTo(_raycastHit.point);
-                        }
-                    }
-                }
-            }
         }
 
         private void GetStartPosition()
@@ -124,22 +82,5 @@ namespace DecisionMakingAI
             DataHandler.SaveGameData();
             #endif
         }
-
-        //public float producingRate = 3f;
-
-       //public void Start()
-       //{
-       //    instance = this;
-       //}
-
-       //private void OnPauseGame()
-       //{
-       //    gameIsPaused = true;
-       //}
-
-       //private void OnResumeGame()
-       //{
-       //    gameIsPaused = false;
-       //}
     }
 }

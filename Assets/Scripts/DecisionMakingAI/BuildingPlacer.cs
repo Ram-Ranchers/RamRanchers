@@ -18,7 +18,8 @@ namespace DecisionMakingAI
             SpawnBuilding(GameManager.instance.gameGlobalParameters.initialBuilding,
                 GameManager.instance.gamePlayersParameters.myPlayerId, GameManager.instance.startPosition);
             
-            SpawnBuilding(GameManager.instance.gameGlobalParameters.initialBuilding, 0, Vector3.zero);
+            SpawnBuilding(GameManager.instance.gameGlobalParameters.initialBuilding,
+                0, new Vector3(300, 0, 300));
         }
 
         private void Update()
@@ -48,6 +49,14 @@ namespace DecisionMakingAI
                     _lastPlacementPosition = _raycastHit.point;
                 }
 
+                if (_lastPlacementPosition != _raycastHit.point)
+                {
+                    _placedBuilding.CheckValidPlacement();
+                    Dictionary<InGameResource, int> prod = _placedBuilding.ComputeProduction();
+                    EventManager.TriggerEvent("UpdatePlacedBuildingProduction",
+                        new object[] { prod, _raycastHit.point });
+                }
+                
                 if (_placedBuilding.HasValidPlacement && Input.GetMouseButtonUp(0) && !EventSystem.current.IsPointerOverGameObject())
                 {
                     PlaceBuilding();
@@ -76,6 +85,7 @@ namespace DecisionMakingAI
         
         void PlaceBuilding(bool canChain = true)
         {
+            _placedBuilding.ComputeProduction();
             _placedBuilding.Place();
             if (canChain)
             {

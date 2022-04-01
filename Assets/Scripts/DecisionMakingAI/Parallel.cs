@@ -7,12 +7,14 @@ namespace DecisionMakingAI
         public Parallel() : base() {}
         public Parallel(List<Node> children) : base(children) {}
 
+        public override bool IsFlowNode => true;
+        
         public override NodeState Evaluate()
         {
             bool anyChildIsRunning = false;
             int nFailedChildren = 0;
 
-            foreach (Node node in children)
+            foreach (Node node in _children)
             {
                 switch (node.Evaluate())
                 {
@@ -25,20 +27,20 @@ namespace DecisionMakingAI
                         anyChildIsRunning = true;
                         continue;
                     default:
-                        state = NodeState.Success;
-                        return state;
+                        _state = NodeState.Success;
+                        return _state;
                 }
             }
 
-            if (nFailedChildren == children.Count)
+            if (nFailedChildren == _children.Count)
             {
-                state = NodeState.Failure;
+                _state = NodeState.Failure;
             }
             else
             {
-                state = anyChildIsRunning ? NodeState.Running : NodeState.Success;
+                _state = anyChildIsRunning ? NodeState.Running : NodeState.Success;
             }
-            return state;
+            return _state;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,17 +16,33 @@ namespace DecisionMakingAI
             set { _character = value is Character ? (Character)value : null; }
         }
 
-        public void MoveTo(Vector3 targetPosition)
+        private void Start()
+        {
+            _character.Place();
+        }
+
+        public bool MoveTo(Vector3 targetPosition, bool playSound = true)
         {
             NavMeshPath path = new NavMeshPath();
             agent.CalculatePath(targetPosition, path);
             if (path.status == NavMeshPathStatus.PathInvalid)
             {
-                contextualSource.PlayOneShot(((CharacterData)Unit.Data).onMoveInvalidSound);
+                if (playSound)
+                {
+                    contextualSource.PlayOneShot(((CharacterData)Unit.Data).onMoveInvalidSound); 
+                }
+
+                return false;
             }
             
             agent.destination = targetPosition;
-            contextualSource.PlayOneShot(((CharacterData)Unit.Data).onMoveValidSound);
+
+            if (playSound)
+            {
+                contextualSource.PlayOneShot(((CharacterData)Unit.Data).onMoveValidSound);
+            }
+
+            return true;
         }
     }
 }
