@@ -61,9 +61,6 @@ namespace DecisionMakingAI
         public GameObject togglePrefab;
         private Dictionary<string, GameParameters> _gameParameters;
 
-        [Header("Main Menu Panel")] 
-        public GameObject mainMenuPanel;
-        
         private void Awake()
         {
             _buildingPlacer = GetComponent<BuildingPlacer>();
@@ -92,8 +89,6 @@ namespace DecisionMakingAI
                 _gameParameters[p.GetParametersName()] = p;
                 SetupGameSettingsPanel();
             }
-            
-            mainMenuPanel.SetActive(false);
             
             _resourceTexts = new Dictionary<InGameResource, Text>();
             foreach (KeyValuePair<InGameResource, GameResource> pair in Globals.Game_Resources)
@@ -284,35 +279,7 @@ namespace DecisionMakingAI
             gameSettingsPanel.SetActive(showGameSettingsPanel);
             EventManager.TriggerEvent(showGameSettingsPanel ? "PauseGame" : "ResumeGame");
         }
-        
-        public void ToggelMainMenuPanel()
-        {
-            bool showMainMenuPanel = !mainMenuPanel.activeSelf;
-            mainMenuPanel.SetActive(showMainMenuPanel);
-            EventManager.TriggerEvent(showMainMenuPanel ? "PauseGame" : "ResumeGame");
-        }
 
-        public void LoadGame()
-        {
-            
-        }
-
-        public void SaveGame()
-        {
-            
-        }
-
-        public void ResumeGame()
-        {
-            mainMenuPanel.SetActive(false);
-            EventManager.TriggerEvent("ResumeGame");
-        }
-
-        public void QuitGame()
-        {
-            Application.Quit();
-        }
-        
         private void SetResourceText(InGameResource resource, int value)
         {
             _resourceTexts[resource].text = value.ToString();
