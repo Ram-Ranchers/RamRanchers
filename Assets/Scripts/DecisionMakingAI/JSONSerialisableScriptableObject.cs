@@ -13,8 +13,8 @@ namespace DecisionMakingAI
         
         public void SaveToFile()
         {
-            string dirPath = Path.Combine(Application.persistentDataPath, _scriptableObjectDataDirectory);
-            string filePath = Path.Combine(dirPath, $"{name}.json");
+            string dirPath = System.IO.Path.Combine(Application.persistentDataPath, _scriptableObjectDataDirectory);
+            string filePath = System.IO.Path.Combine(dirPath, $"{name}.json");
 
             if (!Directory.Exists(dirPath))
             {
@@ -32,7 +32,7 @@ namespace DecisionMakingAI
 
         public void LoadFromFile()
         {
-            string filePath = Path.Combine(Application.persistentDataPath, _scriptableObjectDataDirectory,
+            string filePath = System.IO.Path.Combine(Application.persistentDataPath, _scriptableObjectDataDirectory,
                 $"{name}.json");
 
             if (!File.Exists(filePath))
