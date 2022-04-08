@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Terrain
+  - Unit
+  - Ram
   layers:
   - Default
   - TransparentFX
@@ -12,16 +15,16 @@ TagManager:
   - Water
   - UI
   - Enemy
+  - Terrain
+  - FOV
+  - FlatTerrain
+  - Minimap
+  - Unit
+  - Tree
+  - Rock
   - Unwalkable
   - Path
   - Bog
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
   - 
   - 
   - 
