@@ -37,7 +37,7 @@ namespace DecisionMakingAI
 
             if (!File.Exists(filePath))
             {
-                Debug.LogWarning($"File \"{filePath}\"not found! Getting default values.", this);
+                Debug.LogWarning($"File \"{filePath}\" not found! Getting default values.", this);
                 return;
             }
 

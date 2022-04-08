@@ -15,7 +15,6 @@ namespace DecisionMakingAI
 
         public Node _parent;
         protected List<Node> _children = new List<Node>();
-
         private Dictionary<string, object> _dataContext = new Dictionary<string, object>(); 
 
         public Node()

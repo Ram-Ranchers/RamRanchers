@@ -73,7 +73,8 @@ namespace DecisionMakingAI
             StartCoroutine(TransitioningVolume("musicVol", soundParameters.musicVolume - 6, soundParameters.musicVolume,
                 0.5f));
             StartCoroutine(TransitioningVolume("sfxVol", -80,  soundParameters.sfxVolume,
-                0.5f));        }
+                0.5f));        
+        }
 
         private void OnUpdateMusicVolume(object data)
         {
@@ -97,7 +98,7 @@ namespace DecisionMakingAI
             float t = 0;
             while (t < delay)
             {
-                masterMixer.SetFloat(volumeParameter, Mathf.Lerp(from, to, t/ delay));
+                masterMixer.SetFloat(volumeParameter, Mathf.Lerp(from, to, t / delay));
                 t += Time.deltaTime;
                 yield return null;
             }

@@ -205,10 +205,11 @@ namespace DecisionMakingAI
                 for (int i = 0; i < 8; i++)
                 {
                     allCorners[i].y = 100f;
-                    _minimapIndicatorMesh.vertices = allCorners;
-                    _minimapIndicatorMesh.RecalculateNormals();
-                    _minimapIndicatorMesh.RecalculateBounds();
                 }
+                
+                _minimapIndicatorMesh.vertices = allCorners;
+                _minimapIndicatorMesh.RecalculateNormals();
+                _minimapIndicatorMesh.RecalculateBounds();
             }
 
             _minimapIndicator.position = middle;
