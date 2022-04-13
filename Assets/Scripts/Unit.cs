@@ -11,7 +11,6 @@ public class Unit : MonoBehaviour
     public float speed = 20f;
     public float turnSpeed = 3f;
     public float turnDst = 5f;
-    public float stoppingDst = 10f;
 
     Path path;
 
@@ -20,11 +19,27 @@ public class Unit : MonoBehaviour
         StartCoroutine(UpdatePath());
     }
 
+    private void Update()
+    {
+        if(Input.GetMouseButtonDown(1))
+        {
+            Ray _ray;
+            RaycastHit _raycastHit;
+
+            _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(_ray, out _raycastHit, 1000f))
+            {
+                target.transform.position = _raycastHit.point;
+            }
+        }
+    }
+
     public void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
     {
         if(pathSuccessful)
         {
-            path = new Path(waypoints, transform.position, turnDst, stoppingDst);
+            path = new Path(waypoints, transform.position, turnDst);
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
         }
@@ -32,24 +47,27 @@ public class Unit : MonoBehaviour
 
     IEnumerator UpdatePath()
     {
-        if(Time.timeSinceLevelLoad < .3f)
+        if(target != null)
         {
-            yield return new WaitForSeconds(.3f);
-        }
-        PathRequestManager.RequestPath(new PathRequest(transform.position, target.position, OnPathFound));
+            PathRequestManager.RequestPath(new PathRequest(transform.position, target.position, OnPathFound));
 
-        float sqrMoveThreshold = pathUpdateMoveThreshold * pathUpdateMoveThreshold;
-        Vector3 targetPosOld = target.position;
+            float sqrMoveThreshold = pathUpdateMoveThreshold * pathUpdateMoveThreshold;
+            Vector3 targetPosOld = target.position;
 
-        while(true)
-        {
-            yield return new WaitForSeconds(minPathUpdateTime);
-            if((target.position - targetPosOld).sqrMagnitude > sqrMoveThreshold)
+            while (true)
             {
-                PathRequestManager.RequestPath(new PathRequest(transform.position, target.position, OnPathFound));
-                targetPosOld = target.position;
+                yield return new WaitForSeconds(minPathUpdateTime);
+                if ((target.position - targetPosOld).sqrMagnitude > sqrMoveThreshold)
+                {
+                    PathRequestManager.RequestPath(new PathRequest(transform.position, target.position, OnPathFound));
+                    targetPosOld = target.position;
+                }
             }
         }
+        //if(Time.timeSinceLevelLoad < .3f)
+        //{
+        //    yield return new WaitForSeconds(.3f);
+        //}
     }
 
     IEnumerator FollowPath()
@@ -79,22 +97,12 @@ public class Unit : MonoBehaviour
 
             if (followingPath)
             {
-                if(pathIndex >=path.slowDownIndex && stoppingDst > 0)
-                {
-                    speedPercent = Mathf.Clamp01(path.turnBoundaries[path.finishLineIndex].DistanceFromPoint(pos2D) / stoppingDst);
-
-                    if(speedPercent < 0.01f)
-                    {
-                        followingPath = false;
-                    }
-                }
-
                 Quaternion targetRotation = Quaternion.LookRotation(path.lookPoints[pathIndex] - transform.position);
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
                 transform.Translate(Vector3.forward * Time.deltaTime * speed * speedPercent, Space.Self);
             }
             yield return null;
-        }    
+        }
     }
 
     public void OnDrawGizmos()

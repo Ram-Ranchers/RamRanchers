@@ -181,8 +181,6 @@ public class Grid3 : MonoBehaviour
         return grid[x, y];
     }
 
-    //public List<Node> path;
-
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));

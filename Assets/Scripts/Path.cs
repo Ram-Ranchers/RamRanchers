@@ -9,7 +9,7 @@ public class Path
     public readonly int finishLineIndex;
     public readonly int slowDownIndex;
 
-    public Path(Vector3[] waypoints, Vector3 startPos, float turnDist, float stoppingDst)
+    public Path(Vector3[] waypoints, Vector3 startPos, float turnDist)
     {
         lookPoints = waypoints;
         turnBoundaries = new Line[lookPoints.Length];
@@ -32,11 +32,6 @@ public class Path
         for(int i = lookPoints.Length - 1; i > 0; i--)
         {
             dstFromEndPoint += Vector3.Distance(lookPoints[i], lookPoints[i - 1]);
-            if(dstFromEndPoint > stoppingDst)
-            {
-                slowDownIndex = i;
-                break;
-            }
         }
     }
 

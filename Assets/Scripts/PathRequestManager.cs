@@ -42,10 +42,6 @@ public class PathRequestManager : MonoBehaviour
         };
 
         threadStart.Invoke();
-
-        //Thread thread = new Thread(threadStart);
-
-        //thread.Start();
     }
 
     public void FinishedProcessingPath(PathResult result)
