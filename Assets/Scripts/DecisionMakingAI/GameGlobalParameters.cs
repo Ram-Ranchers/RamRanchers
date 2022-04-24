@@ -3,10 +3,8 @@ using UnityEngine;
 namespace DecisionMakingAI
 {
     [CreateAssetMenu(fileName = "Global Parameters", menuName = "Scriptable Objects/Game Global Parameters", order = 10)]
-    public class GameGlobalParameters : GameParameters
+    public class GameGlobalParameters : ScriptableObject
     {
-        public override string GetParametersName() => "Global";
-
         public delegate int ResourceProductionFunc(float distance);
         
         public int baseGoldProduction;
