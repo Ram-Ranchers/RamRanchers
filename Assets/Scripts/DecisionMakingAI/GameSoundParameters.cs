@@ -3,10 +3,8 @@ using UnityEngine;
 namespace DecisionMakingAI
 {
     [CreateAssetMenu(fileName = "Sound Parameters", menuName = "Scriptable Objects/Game Sound Parameters", order = 11)]
-    public class GameSoundParameters : GameParameters
+    public class GameSoundParameters : ScriptableObject
     {
-        public override string GetParametersName() => "Sound";
-        
         [Header("Ambient Sounds")] 
         public AudioClip onDayStartSound;
         public AudioClip onNightStartSound;

@@ -19,7 +19,9 @@ namespace DecisionMakingAI
 
         private void Awake()
         {
-            DataHandler.LoadGameData();
+            // load building data
+            Globals.Building_Data =
+                Resources.LoadAll<BuildingData>("ScriptableObjects/Units/Buildings") as BuildingData[];
             GetComponent<DayAndNightCycler>().enabled = gameGlobalParameters.enableDayAndNightCycle;
 			Globals.Nav_Mesh_Surface = GameObject.Find("Plane").GetComponent<NavMeshSurface>();
 			Globals.UpdateNavMeshSurface();

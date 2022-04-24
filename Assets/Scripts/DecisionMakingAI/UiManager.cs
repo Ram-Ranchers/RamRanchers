@@ -47,9 +47,6 @@ namespace DecisionMakingAI
         private Dictionary<string, Button> _buildingButtons;
         private Dictionary<InGameResource, Text> _resourceTexts;
 
-        [Header("Placed Building Production")] 
-        public RectTransform PlacedBuildingProductionTransform;
-
         private void Awake()
         {
             _buildingPlacer = GetComponent<BuildingPlacer>();
@@ -66,9 +63,7 @@ namespace DecisionMakingAI
             _selectedUnitLevelText = selectedUnitMenuTransform.Find("Content/Level").GetComponent<Text>();
             _selectedUnitResourcesProductionParent = selectedUnitMenuTransform.Find("Content/ResourcesProduction");
             _selectedUnitActionButtonsParent = selectedUnitMenuTransform.Find("Buttons/SpecificActions");
-            
-            PlacedBuildingProductionTransform.gameObject.SetActive(false);       
-            
+
             _resourceTexts = new Dictionary<InGameResource, Text>();
             foreach (KeyValuePair<InGameResource, GameResource> pair in Globals.Game_Resources)
             {
@@ -156,9 +151,6 @@ namespace DecisionMakingAI
             EventManager.AddListener("UnhoverBuildingButton", OnUnhoverBuildingButton);
             EventManager.AddListener("SelectUnit", OnSelectUnit);
             EventManager.AddListener("DeselectUnit", OnDeselectUnit);
-            EventManager.AddListener("UpdatePlacedBuildingProduction", OnUpdatePlacedBuildingProduction);
-            EventManager.AddListener("PlaceBuildingOn", OnPlaceBuildingOn);
-            EventManager.AddListener("PlaceBuildingOff", OnPlaceBuildingOff);
         }
 
         private void OnDisable()
@@ -169,50 +161,8 @@ namespace DecisionMakingAI
             EventManager.RemoveListener("UnhoverBuildingButton", OnUnhoverBuildingButton);
             EventManager.RemoveListener("SelectUnit", OnSelectUnit);
             EventManager.RemoveListener("DeselectUnit", OnDeselectUnit);
-            EventManager.RemoveListener("UpdatePlacedBuildingProduction", OnUpdatePlacedBuildingProduction);
-            EventManager.RemoveListener("PlaceBuildingOn", OnPlaceBuildingOn);
-            EventManager.RemoveListener("PlaceBuildingOff", OnPlaceBuildingOff);
         }
 
-        private void OnUpdatePlacedBuildingProduction(object data)
-        {
-            object[] values = (object[])data;
-            Dictionary<InGameResource, int> production = (Dictionary<InGameResource, int>)values[0];
-            Vector3 pos = (Vector3)values[1];
-
-            foreach (Transform child in PlacedBuildingProductionTransform.gameObject.transform)
-            {
-                Destroy(child.gameObject);
-            }
-
-            GameObject g;
-            Transform t;
-            foreach (KeyValuePair<InGameResource, int> pair in production)
-            {
-                g = Instantiate(gameResourceCostPrefab) as GameObject;
-                t = g.transform;
-                t.Find("Text").GetComponent<Text>().text = $"+{pair.Value}";
-                t.Find("Icon").GetComponent<Image>().sprite =
-                    Resources.Load<Sprite>($"Textures/GameResources/{pair.Key}");
-                t.SetParent(PlacedBuildingProductionTransform.transform);
-            }
-
-            PlacedBuildingProductionTransform.sizeDelta = new Vector2(80, 24 * production.Count);
-
-            PlacedBuildingProductionTransform.anchoredPosition = (Vector2)Camera.main.WorldToScreenPoint(pos) +
-                                                                 Vector2.right * 40f + Vector2.up * 10f;
-        }
-
-        private void OnPlaceBuildingOn()
-        {
-            PlacedBuildingProductionTransform.gameObject.SetActive(true);
-        }
-
-        private void OnPlaceBuildingOff()
-        {
-            PlacedBuildingProductionTransform.gameObject.SetActive(false);
-        }
-        
         private void OnSelectUnit(object data)
         {
             Unit unit = (Unit)data;
