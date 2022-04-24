@@ -24,7 +24,7 @@ namespace DecisionMakingAI
 
 		public static void UpdateNavMeshSurface()
 		{
-			Nav_Mesh_Surface.UpdateNavMesh(Nav_Mesh_Surface.navMeshData);
+			//Nav_Mesh_Surface.UpdateNavMesh(Nav_Mesh_Surface.navMeshData);
 		}
 
         public static Dictionary<InGameResource, GameResource> Game_Resources =

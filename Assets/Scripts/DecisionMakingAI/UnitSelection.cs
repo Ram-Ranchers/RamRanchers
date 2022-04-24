@@ -16,11 +16,6 @@ namespace DecisionMakingAI
         
         private void Update()
         {
-            if (GameManager.instance.gameIsPaused)
-            {
-                return;
-            }
-            
             if (EventSystem.current.IsPointerOverGameObject())
             {
                 return;

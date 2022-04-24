@@ -16,19 +16,14 @@ namespace DecisionMakingAI
         private void Start()
         {
             SpawnBuilding(GameManager.instance.gameGlobalParameters.initialBuilding,
-                GameManager.instance.gamePlayersParameters.myPlayerId, GameManager.instance.startPosition);
-            
+                GameManager.instance.gamePlayersParameters.myPlayerId, new Vector3(40, 0, -40));
+
             SpawnBuilding(GameManager.instance.gameGlobalParameters.initialBuilding,
-                0, new Vector3(300, 0, 300));
+                0, new Vector3(-40, 0, 40));
         }
 
         private void Update()
         {
-            if (GameManager.instance.gameIsPaused)
-            {
-                return;
-            }
-            
             if (_placedBuilding != null)
             {
                 if (Input.GetKeyUp(KeyCode.Escape))
@@ -126,19 +121,9 @@ namespace DecisionMakingAI
 
             _placedBuilding = new Building(data, owner, production);
             _placedBuilding.SetPosition(position);
-            PlaceBuilding();
+            PlaceBuilding(false);
 
             _placedBuilding = prevPlacedBuilding;
         }
-        
-        //private void Start()
-        //{
-        //    SpawnBuilding(GameManager.instance.gameGlobalParameters.initialBuilding,
-        //        GameManager.instance.gamePlayersParameters.myPlayerId, GameManager.instance.startPosition);
-//
-        //    SpawnBuilding(GameManager.instance.gameGlobalParameters.initialBuilding,
-        //        1 - GameManager.instance.gamePlayersParameters.myPlayerId,
-        //        GameManager.instance.startPosition + new Vector3(-32f, 0f, 0f));
-        //}
     }
 }
