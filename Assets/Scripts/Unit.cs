@@ -64,10 +64,6 @@ public class Unit : MonoBehaviour
                 }
             }
         }
-        //if(Time.timeSinceLevelLoad < .3f)
-        //{
-        //    yield return new WaitForSeconds(.3f);
-        //}
     }
 
     IEnumerator FollowPath()
