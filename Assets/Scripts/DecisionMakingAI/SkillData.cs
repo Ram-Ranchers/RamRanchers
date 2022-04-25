@@ -39,7 +39,8 @@ namespace DecisionMakingAI
                     }
                     Character c = new Character(d, sourceUnitManager.Unit.Owner);
                     c.ComputeProduction();
-                    c.Transform.GetComponent<NavMeshAgent>().Warp(instantiationPosition);
+                    c.Transform.GetComponent<PathfindingUnit>();
+                    
                 }
                     break;
                 default:

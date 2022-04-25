@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 4008936155485351307}
   - component: {fileID: 1343320305129738007}
   - component: {fileID: 5989179317719624475}
-  - component: {fileID: -2736772113226939873}
   - component: {fileID: -483574701417000064}
+  - component: {fileID: -3862249681422164703}
   m_Layer: 11
   m_Name: Soldier
   m_TagString: Unit
@@ -83,29 +83,7 @@ MonoBehaviour:
   fov: {fileID: 3776560056951177072}
   contextualSource: {fileID: 0}
   ownerMaterialSlotIndex: 0
-  agent: {fileID: -2736772113226939873}
---- !u!195 &-2736772113226939873
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3274693833840558533}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  _agent: {fileID: -3862249681422164703}
 --- !u!114 &-483574701417000064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,6 +96,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fe77ce288b21cc4db89d3fdb1e70940, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-3862249681422164703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3274693833840558533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 734661b0a84315f4fad5cfab03b679b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 874706747103055001, guid: e6f0ae150d151c547a886328fcb475a3, type: 3}
+  speed: 20
+  turnSpeed: 10
+  turnDst: 5
 --- !u!1 &3776560056951177072
 GameObject:
   m_ObjectHideFlags: 0
