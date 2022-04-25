@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DecisionMakingAI;
 
 public class PathfindingUnit : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class PathfindingUnit : MonoBehaviour
     public float turnDst = 5f;
 
     Path path;
+
+    UnitManager manager;
 
     void Start()
     {
@@ -57,31 +60,36 @@ public class PathfindingUnit : MonoBehaviour
 
         float speedPercent = 1f;
 
-        transform.LookAt(path.lookPoints[0]);
-        while(followingPath)
+        manager = GetComponent<UnitManager>();
+
+        if(manager.IsSelected)
         {
-            Vector2 pos2D = new Vector2(transform.position.x, transform.position.z);
-
-            while (path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
+            transform.LookAt(path.lookPoints[0]);
+            while (followingPath)
             {
-                if (pathIndex == path.finishLineIndex)
-                {
-                    followingPath = false;
-                    break;
-                }
-                else
-                {
-                    pathIndex++;
-                }
-            }
+                Vector2 pos2D = new Vector2(transform.position.x, transform.position.z);
 
-            if (followingPath)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(path.lookPoints[pathIndex] - transform.position);
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
-                transform.Translate(Vector3.forward * Time.deltaTime * speed * speedPercent, Space.Self);
+                while (path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
+                {
+                    if (pathIndex == path.finishLineIndex)
+                    {
+                        followingPath = false;
+                        break;
+                    }
+                    else
+                    {
+                        pathIndex++;
+                    }
+                }
+
+                if (followingPath)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(path.lookPoints[pathIndex] - transform.position);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+                    transform.Translate(Vector3.forward * Time.deltaTime * speed * speedPercent, Space.Self);
+                }
+                yield return null;
             }
-            yield return null;
         }
     }
 
