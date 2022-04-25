@@ -4589,7 +4589,7 @@ MonoBehaviour:
   displayGridGizmos: 0
   player: {fileID: 0}
   gridWorldSize: {x: 100, y: 100}
-  nodeRadius: 1
+  nodeRadius: 0.5
   unwalkableMask:
     serializedVersion: 2
     m_Bits: 2048
