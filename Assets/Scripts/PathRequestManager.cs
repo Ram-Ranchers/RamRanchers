@@ -21,11 +21,11 @@ public class PathRequestManager : MonoBehaviour
     {
         if(results.Count > 0)
         {
-            int iteemsInQueue = results.Count;
+            int itemsInQueue = results.Count;
 
             lock(results)
             {
-                for(int i = 0; i < iteemsInQueue; i++)
+                for(int i = 0; i < itemsInQueue; i++)
                 {
                     PathResult result = results.Dequeue();
                     result.callback(result.path, result.success);
