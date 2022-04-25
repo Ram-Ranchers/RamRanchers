@@ -18,27 +18,7 @@ public class PathfindingUnit : MonoBehaviour
     {
         StartCoroutine(UpdatePath());
     }
-    
-    public void OnClick()
-    {
-        if (target == null)
-        {
-            return;
-        }
 
-        target = GameObject.Find("target").GetComponent<Transform>();
-   
-        Ray _ray;
-        RaycastHit _raycastHit;
-
-        _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(_ray, out _raycastHit, 1000f))
-        {
-            target.transform.position = _raycastHit.point;
-        }
-    }
-    
     public void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
     {
         if(pathSuccessful)

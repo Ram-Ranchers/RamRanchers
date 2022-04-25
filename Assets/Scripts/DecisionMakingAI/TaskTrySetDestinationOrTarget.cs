@@ -18,7 +18,6 @@ namespace DecisionMakingAI
       {
           if (_manager.IsSelected && Input.GetMouseButtonUp(1))
           {
-              _manager._agent.OnClick();
               _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
               if (Physics.Raycast(_ray, out _raycastHit, 1000f, Globals.Unit_Mask))

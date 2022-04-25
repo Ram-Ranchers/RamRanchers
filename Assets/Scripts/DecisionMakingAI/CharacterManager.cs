@@ -23,32 +23,7 @@ namespace DecisionMakingAI
 
         public bool MoveTo(Vector3 targetPosition, bool playSound = true)
         {
-            if (_agent.target == null)
-            {
-                return false;
-            }
-        
-            _agent.target = GameObject.Find("target").transform;
-            
-            Debug.Log("Move");
-
-            
-            //if ()
-            //{
-            //    if (playSound)
-            //    {
-            //        contextualSource.PlayOneShot(((CharacterData)Unit.Data).onMoveInvalidSound); 
-            //    }
-//
-            //    return false;
-            //}
-            
             _agent.target.transform.position = targetPosition;
-
-            //if (playSound)
-            //{
-            //    contextualSource.PlayOneShot(((CharacterData)Unit.Data).onMoveValidSound);
-            //}
 
             return true;
         }
