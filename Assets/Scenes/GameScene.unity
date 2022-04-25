@@ -1890,7 +1890,7 @@ GameObject:
   m_Component:
   - component: {fileID: 564504148}
   - component: {fileID: 564504147}
-  - component: {fileID: 564504146}
+  - component: {fileID: 564504149}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1898,14 +1898,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &564504146
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564504145}
-  m_Enabled: 1
 --- !u!20 &564504147
 Camera:
   m_ObjectHideFlags: 0
@@ -1959,10 +1951,28 @@ Transform:
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 40, z: -35}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1785514226}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+--- !u!114 &564504149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564504145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47db3cfbe379fd5478e55606677acc27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  translationSpeed: 60
+  altitude: 40
+  zoomSpeed: 30
+  MinimapIndicatorMaterial: {fileID: 2100000, guid: 94c4172380b8d7b489094223fdf9a5d0, type: 2}
+  groundTarget: {fileID: 1785514226}
 --- !u!1 &591218154
 GameObject:
   m_ObjectHideFlags: 0
@@ -4582,7 +4592,7 @@ MonoBehaviour:
   nodeRadius: 1
   unwalkableMask:
     serializedVersion: 2
-    m_Bits: 16384
+    m_Bits: 2048
   walkableRegions:
   - terrainMask:
       serializedVersion: 2
@@ -5414,6 +5424,45 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1785514225
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1785514226}
+  - component: {fileID: 1785514227}
+  m_Layer: 0
+  m_Name: GroundTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1785514226
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785514225}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 564504148}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &1785514227
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785514225}
+  m_Enabled: 1
 --- !u!1 &1850347637
 GameObject:
   m_ObjectHideFlags: 0

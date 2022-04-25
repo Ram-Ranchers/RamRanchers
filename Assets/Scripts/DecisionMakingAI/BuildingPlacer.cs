@@ -97,10 +97,7 @@ namespace DecisionMakingAI
 
             EventManager.TriggerEvent("UpdateResourceTexts");
             EventManager.TriggerEvent("CheckBuildingButtons");
-			
-			// Update the dynamic nav mesh
-			Globals.UpdateNavMeshSurface();
-            
+
             EventManager.TriggerEvent("PlaySoundByName", "onBuildingPlacedSound");
         }
         

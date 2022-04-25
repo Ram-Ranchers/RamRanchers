@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.AI.Navigation;
 
 namespace DecisionMakingAI
 {
@@ -19,13 +18,8 @@ namespace DecisionMakingAI
         public static int Rock_Mask = 1 << 13;
         
         public static BuildingData[] Building_Data;
-        public static NavMeshSurface Nav_Mesh_Surface;
         public static Dictionary<string, SkillData> Skill_Data = new Dictionary<string, SkillData>();
-
-		public static void UpdateNavMeshSurface()
-		{
-			//Nav_Mesh_Surface.UpdateNavMesh(Nav_Mesh_Surface.navMeshData);
-		}
+        
 
         public static Dictionary<InGameResource, GameResource> Game_Resources =
             new Dictionary<InGameResource, GameResource>()

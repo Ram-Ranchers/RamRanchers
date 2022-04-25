@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.AI.Navigation;
 using UnityEngine;
 
 namespace DecisionMakingAI
@@ -23,8 +20,6 @@ namespace DecisionMakingAI
             Globals.Building_Data =
                 Resources.LoadAll<BuildingData>("ScriptableObjects/Units/Buildings") as BuildingData[];
             GetComponent<DayAndNightCycler>().enabled = gameGlobalParameters.enableDayAndNightCycle;
-			Globals.Nav_Mesh_Surface = GameObject.Find("Plane").GetComponent<NavMeshSurface>();
-			Globals.UpdateNavMeshSurface();
             fov.SetActive(gameGlobalParameters.enableFOV);
             GetStartPosition();
             gameIsPaused = false;
