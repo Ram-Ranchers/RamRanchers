@@ -6,7 +6,8 @@ namespace DecisionMakingAI
     {
       private CharacterManager _manager;
       private Vector3 _lastTargetPosition;
-
+      private PathfindingUnit _agent;
+      
       public TaskFollow(CharacterManager manager) : base()
       {
           _manager = manager;
@@ -15,6 +16,14 @@ namespace DecisionMakingAI
 
       public override NodeState Evaluate()
       {
+          if (_manager._agent.target == null)
+          {
+              _state = NodeState.Failure;
+              return _state;
+          }
+        
+          _manager._agent.target.position = GameObject.Find("target").transform.position;
+      
           object currentTarget = GetData("currentTarget");
           Vector3 targetPosition = GetTargetPosition((Transform)currentTarget);
 
@@ -24,8 +33,8 @@ namespace DecisionMakingAI
               _lastTargetPosition = targetPosition;
           }
 
-          float d = Vector3.Distance(_manager.transform.position, _manager.agent.destination);
-          if (d <= _manager.agent.stoppingDistance)
+          float d = Vector3.Distance(_manager.transform.position,  _manager._agent.target.transform.position);
+          if (d <= _manager._agent.speed - 5)
           {
               ClearData("currentTarget");
               _state = NodeState.Success;

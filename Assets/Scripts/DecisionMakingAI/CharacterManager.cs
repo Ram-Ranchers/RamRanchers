@@ -6,7 +6,7 @@ namespace DecisionMakingAI
 {
     public class CharacterManager : UnitManager
     {
-        public NavMeshAgent agent;
+        public PathfindingUnit _agent;
         
         private Character _character;
 
@@ -23,24 +23,32 @@ namespace DecisionMakingAI
 
         public bool MoveTo(Vector3 targetPosition, bool playSound = true)
         {
-            NavMeshPath path = new NavMeshPath();
-            agent.CalculatePath(targetPosition, path);
-            if (path.status == NavMeshPathStatus.PathInvalid)
+            if (_agent.target == null)
             {
-                if (playSound)
-                {
-                    contextualSource.PlayOneShot(((CharacterData)Unit.Data).onMoveInvalidSound); 
-                }
-
                 return false;
             }
+        
+            _agent.target = GameObject.Find("target").transform;
             
-            agent.destination = targetPosition;
+            Debug.Log("Move");
 
-            if (playSound)
-            {
-                contextualSource.PlayOneShot(((CharacterData)Unit.Data).onMoveValidSound);
-            }
+            
+            //if ()
+            //{
+            //    if (playSound)
+            //    {
+            //        contextualSource.PlayOneShot(((CharacterData)Unit.Data).onMoveInvalidSound); 
+            //    }
+//
+            //    return false;
+            //}
+            
+            _agent.target.transform.position = targetPosition;
+
+            //if (playSound)
+            //{
+            //    contextualSource.PlayOneShot(((CharacterData)Unit.Data).onMoveValidSound);
+            //}
 
             return true;
         }

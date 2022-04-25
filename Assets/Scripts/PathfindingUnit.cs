@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit : MonoBehaviour
+public class PathfindingUnit : MonoBehaviour
 {
     const float pathUpdateMoveThreshold = .5f;
     const float minPathUpdateTime = .2f;
@@ -18,23 +18,27 @@ public class Unit : MonoBehaviour
     {
         StartCoroutine(UpdatePath());
     }
-
-    private void Update()
+    
+    public void OnClick()
     {
-        if(Input.GetMouseButtonDown(1))
+        if (target == null)
         {
-            Ray _ray;
-            RaycastHit _raycastHit;
+            return;
+        }
 
-            _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        target = GameObject.Find("target").GetComponent<Transform>();
+   
+        Ray _ray;
+        RaycastHit _raycastHit;
 
-            if (Physics.Raycast(_ray, out _raycastHit, 1000f))
-            {
-                target.transform.position = _raycastHit.point;
-            }
+        _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(_ray, out _raycastHit, 1000f))
+        {
+            target.transform.position = _raycastHit.point;
         }
     }
-
+    
     public void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
     {
         if(pathSuccessful)
@@ -45,22 +49,22 @@ public class Unit : MonoBehaviour
         }
     }
 
-    IEnumerator UpdatePath()
+    public IEnumerator UpdatePath()
     {
         if(target != null)
         {
-            PathRequestManager.RequestPath(new PathRequest(transform.position, target.position, OnPathFound));
+            PathRequestManager.RequestPath(new PathRequest(transform.position, target.transform.position, OnPathFound));
 
             float sqrMoveThreshold = pathUpdateMoveThreshold * pathUpdateMoveThreshold;
-            Vector3 targetPosOld = target.position;
+            Vector3 targetPosOld = target.transform.position;
 
             while (true)
             {
                 yield return new WaitForSeconds(minPathUpdateTime);
-                if ((target.position - targetPosOld).sqrMagnitude > sqrMoveThreshold)
+                if ((target.transform.position - targetPosOld).sqrMagnitude > sqrMoveThreshold)
                 {
-                    PathRequestManager.RequestPath(new PathRequest(transform.position, target.position, OnPathFound));
-                    targetPosOld = target.position;
+                    PathRequestManager.RequestPath(new PathRequest(transform.position, target.transform.position, OnPathFound));
+                    targetPosOld = target.transform.position;
                 }
             }
         }

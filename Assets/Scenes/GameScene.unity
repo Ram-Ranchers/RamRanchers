@@ -2556,6 +2556,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pathfinder
       objectReference: {fileID: 0}
+    - target: {fileID: 8054865385015804439, guid: fd3c54db29da23f408f7d42e7162c2f6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd3c54db29da23f408f7d42e7162c2f6, type: 3}
 --- !u!1 &765452259
