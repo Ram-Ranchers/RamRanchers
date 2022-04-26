@@ -13,19 +13,17 @@ namespace DecisionMakingAI
 
         public override NodeState Evaluate()
         {
-            _manager._agent.target = GameObject.Find("target").transform;
-            
             object destinationPoint = GetData("destinationPoint");
             Vector3 destination = (Vector3)destinationPoint;
 
-            if (Vector3.Distance(destination, _manager._agent.target.transform.position) > 0.2f)
+            if (Vector3.Distance(destination, _manager._agent.target) > 0.2f)
             { 
                 bool canMove = _manager.MoveTo(destination);
                 _state = canMove ? NodeState.Success : NodeState.Failure;
                 return _state;
             }
 
-            float d = Vector3.Distance(_manager.transform.position, _manager._agent.target.transform.position);
+            float d = Vector3.Distance(_manager.transform.position, _manager._agent.target);
             if (d <= _manager._agent.speed - 5)
             {
                 ClearData("destinationPoint");

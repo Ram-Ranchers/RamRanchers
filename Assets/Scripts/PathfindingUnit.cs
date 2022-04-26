@@ -7,8 +7,8 @@ public class PathfindingUnit : MonoBehaviour
 {
     const float pathUpdateMoveThreshold = .5f;
     const float minPathUpdateTime = .2f;
-
-    public Transform target;
+    
+    public Vector3 target = Input.mousePosition;
     public float speed = 20f;
     public float turnSpeed = 3f;
     public float turnDst = 5f;
@@ -36,18 +36,18 @@ public class PathfindingUnit : MonoBehaviour
     {
         if(target != null)
         {
-            PathRequestManager.RequestPath(new PathRequest(transform.position, target.transform.position, OnPathFound));
+            PathRequestManager.RequestPath(new PathRequest(transform.position, target, OnPathFound));
 
             float sqrMoveThreshold = pathUpdateMoveThreshold * pathUpdateMoveThreshold;
-            Vector3 targetPosOld = target.transform.position;
+            Vector3 targetPosOld = target;
 
             while (true)
             {
                 yield return new WaitForSeconds(minPathUpdateTime);
-                if ((target.transform.position - targetPosOld).sqrMagnitude > sqrMoveThreshold)
+                if ((target - targetPosOld).sqrMagnitude > sqrMoveThreshold)
                 {
-                    PathRequestManager.RequestPath(new PathRequest(transform.position, target.transform.position, OnPathFound));
-                    targetPosOld = target.transform.position;
+                    PathRequestManager.RequestPath(new PathRequest(transform.position, target, OnPathFound));
+                    targetPosOld = target;
                 }
             }
         }

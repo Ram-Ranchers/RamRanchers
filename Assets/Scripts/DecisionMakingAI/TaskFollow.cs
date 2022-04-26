@@ -16,8 +16,6 @@ namespace DecisionMakingAI
 
       public override NodeState Evaluate()
       {
-          _manager._agent.target.position = GameObject.Find("target").transform.position;
-      
           object currentTarget = GetData("currentTarget");
           Vector3 targetPosition = GetTargetPosition((Transform)currentTarget);
 
@@ -27,7 +25,7 @@ namespace DecisionMakingAI
               _lastTargetPosition = targetPosition;
           }
 
-          float d = Vector3.Distance(_manager.transform.position,  _manager._agent.target.transform.position);
+          float d = Vector3.Distance(_manager.transform.position,  _manager._agent.target);
           if (d <= _manager._agent.speed - 5)
           {
               ClearData("currentTarget");

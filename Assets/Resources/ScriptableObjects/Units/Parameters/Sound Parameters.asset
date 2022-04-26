@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onDayStartSound: {fileID: 0}
   onNightStartSound: {fileID: 0}
+  onBuildingPlacedSound: {fileID: 0}
+  musicVolume: -80
+  sfxVolume: 0
