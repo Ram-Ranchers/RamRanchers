@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Grid3 : MonoBehaviour
 {
@@ -46,6 +47,15 @@ public class Grid3 : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            UpdateGrid();
+        }
+        
+    }
+
     void CreateGrid()
     {
         grid = new Node[gridSizeX, gridSizeY];
@@ -80,6 +90,42 @@ public class Grid3 : MonoBehaviour
         }
 
         BlurPenaltyMap(5);
+    }
+
+    public void UpdateGrid()
+    {
+        Array.Clear(grid, 0, grid.Length);
+
+        grid = new Node[gridSizeX, gridSizeY];
+
+        Vector3 worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
+
+                bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
+
+                int movementPenalty = 0;
+
+                Ray ray = new Ray(worldPoint + Vector3.up * 50, Vector3.down);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, 100, walkableMask))
+                {
+                    walkableRegionDictionary.TryGetValue(hit.collider.gameObject.layer, out movementPenalty);
+                }
+
+                if (!walkable)
+                {
+                    movementPenalty += obstacleProximityPenalty;
+                }
+
+                grid[x, y] = new Node(walkable, worldPoint, x, y, movementPenalty);
+            }
+        }
     }
 
     void BlurPenaltyMap(int blurSize)

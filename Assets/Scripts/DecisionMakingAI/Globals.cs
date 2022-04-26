@@ -16,7 +16,8 @@ namespace DecisionMakingAI
         public static int Unit_Mask = 1 << 11;
         public static int Tree_Mask = 1 << 12;
         public static int Rock_Mask = 1 << 13;
-        
+        public static int Building_Mask = 1 << 19;
+
         public static BuildingData[] Building_Data;
         public static Dictionary<string, SkillData> Skill_Data = new Dictionary<string, SkillData>();
         

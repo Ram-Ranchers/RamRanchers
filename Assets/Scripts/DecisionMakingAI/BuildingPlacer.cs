@@ -13,6 +13,8 @@ namespace DecisionMakingAI
         private RaycastHit _raycastHit;
         private Vector3 _lastPlacementPosition;
 
+        private Grid3 grid;
+
         private void Start()
         {
             SpawnBuilding(GameManager.instance.gameGlobalParameters.initialBuilding,
@@ -80,6 +82,8 @@ namespace DecisionMakingAI
         
         void PlaceBuilding(bool canChain = true)
         {
+            grid = GameObject.Find("Plane").GetComponent<Grid3>();
+
             _placedBuilding.ComputeProduction();
             _placedBuilding.Place();
             if (canChain)
@@ -94,6 +98,8 @@ namespace DecisionMakingAI
                     _placedBuilding = null;
                 } 
             }
+
+            grid.UpdateGrid();
 
             EventManager.TriggerEvent("UpdateResourceTexts");
             EventManager.TriggerEvent("CheckBuildingButtons");

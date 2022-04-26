@@ -33,10 +33,31 @@ namespace DecisionMakingAI
 
                     return um.Unit.Owner != _unitOwner;
                 });
+
             if (enemiesInRange.Any())
             {
                 _parent.SetData("currentTarget",
                     enemiesInRange.OrderBy(x => (x.transform.position - _pos).sqrMagnitude).First().transform);
+                _state = NodeState.Success;
+                return _state;
+            }
+
+            IEnumerable<Collider> buildingsInRange = Physics.OverlapSphere(_pos, _fovRadius, Globals.Building_Mask).Where(
+                delegate (Collider c)
+                {
+                    UnitManager um = c.GetComponent<UnitManager>();
+                    if (um == null)
+                    {
+                        return false;
+                    }
+
+                    return um.Unit.Owner != _unitOwner;
+                });
+
+            if (buildingsInRange.Any())
+            {
+                _parent.SetData("currentTarget",
+                    buildingsInRange.OrderBy(x => (x.transform.position - _pos).sqrMagnitude).First().transform);
                 _state = NodeState.Success;
                 return _state;
             }
