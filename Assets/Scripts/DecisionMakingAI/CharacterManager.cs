@@ -23,6 +23,8 @@ namespace DecisionMakingAI
 
         public bool MoveTo(Vector3 targetPosition, bool playSound = true)
         {
+            _agent.target = GameObject.Find("target").transform;
+
             _agent.target.transform.position = targetPosition;
 
             return true;

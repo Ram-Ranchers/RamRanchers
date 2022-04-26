@@ -28,6 +28,7 @@ namespace DecisionMakingAI
                   if (um != null)
                   {
                       _parent._parent.SetData("currentTarget", _raycastHit.transform);
+                        _manager._agent.target.position = _manager._agent.target.position;
                       ClearData("destinationPoint");
                       _state = NodeState.Success;
                       return _state;
@@ -36,6 +37,7 @@ namespace DecisionMakingAI
               else if (Physics.Raycast(_ray, out _raycastHit, 1000f, Globals.Terrain_Layer_Mask))
               {
                   ClearData("currentTarget");
+                    _manager._agent.target.position = _raycastHit.point;
                   _parent._parent.SetData("destinationPoint", _raycastHit.point);
                   _state = NodeState.Success;
                   return _state;
