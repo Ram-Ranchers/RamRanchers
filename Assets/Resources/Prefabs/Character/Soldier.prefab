@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 874706747103055001, guid: e6f0ae150d151c547a886328fcb475a3, type: 3}
-  speed: 20
+  speed: 10
   turnSpeed: 10
   turnDst: 5
 --- !u!1 &3776560056951177072

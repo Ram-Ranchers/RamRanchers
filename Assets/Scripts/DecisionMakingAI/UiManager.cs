@@ -28,8 +28,6 @@ namespace DecisionMakingAI
         
         [Header("Units Selection")]
         public GameObject selectedUnitMenu;
-        public GameObject selecteUnitMenuUpgradeButton;
-        public GameObject selecteUnitMenuDestroyButton;
         private RectTransform _selectedUnitContentRectTransform;
         private RectTransform _selectedUnitButtonsRectTransform;
         private Text _selectedUnitTitleText;
@@ -243,9 +241,6 @@ namespace DecisionMakingAI
                     AddUnitSkillButtonListener(b, i);
                 }
             }
-            
-            selecteUnitMenuUpgradeButton.SetActive(unitIsMine);
-            selecteUnitMenuDestroyButton.SetActive(unitIsMine);
         }
 
         private void AddUnitSkillButtonListener(Button b, int i)
