@@ -13,6 +13,8 @@ namespace DecisionMakingAI
 
         public override NodeState Evaluate()
         {
+            _manager._agent.target = GameObject.Find("target").transform;
+            
             object destinationPoint = GetData("destinationPoint");
             Vector3 destination = (Vector3)destinationPoint;
 

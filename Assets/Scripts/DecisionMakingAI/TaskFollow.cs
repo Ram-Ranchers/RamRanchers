@@ -16,12 +16,6 @@ namespace DecisionMakingAI
 
       public override NodeState Evaluate()
       {
-          if (_manager._agent.target == null)
-          {
-              _state = NodeState.Failure;
-              return _state;
-          }
-        
           _manager._agent.target.position = GameObject.Find("target").transform.position;
       
           object currentTarget = GetData("currentTarget");

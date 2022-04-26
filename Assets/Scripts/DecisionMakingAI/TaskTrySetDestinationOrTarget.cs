@@ -5,7 +5,7 @@ namespace DecisionMakingAI
     public class TaskTrySetDestinationOrTarget : Node
     {
       private CharacterManager _manager;
-      
+
       private Ray _ray;
       private RaycastHit _raycastHit;
       
@@ -16,6 +16,8 @@ namespace DecisionMakingAI
       
       public override NodeState Evaluate()
       {
+          _manager._agent.target = GameObject.Find("target").transform;
+          
           if (_manager.IsSelected && Input.GetMouseButtonUp(1))
           {
               _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
