@@ -8,7 +8,7 @@ public class PathfindingUnit : MonoBehaviour
     const float pathUpdateMoveThreshold = .5f;
     const float minPathUpdateTime = .2f;
     
-    public Vector3 target = Input.mousePosition;
+    public Vector3 target;
     public float speed = 20f;
     public float turnSpeed = 3f;
     public float turnDst = 5f;
@@ -20,6 +20,7 @@ public class PathfindingUnit : MonoBehaviour
     void Start()
     {
         StartCoroutine(UpdatePath());
+        target = Input.mousePosition;
     }
 
     public void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
