@@ -45,6 +45,7 @@ namespace DecisionMakingAI
         private Dictionary<string, Button> _buildingButtons;
         private Dictionary<InGameResource, Text> _resourceTexts;
 
+        // Instantiates a bunch of ui elements 
         private void Awake()
         {
             _buildingPlacer = GetComponent<BuildingPlacer>();
@@ -82,12 +83,10 @@ namespace DecisionMakingAI
                 button.name = data.unitname;
                 if (data.sprite != null)
                 {
-                    //button.transform.Find("Icon").GetComponent<Image>().sprite = data.sprite;
                     button.transform.Find("Text").gameObject.SetActive(false);
                 }
                 else
                 {
-                    //button.transform.Find("Icon").gameObject.SetActive(false);
                     button.transform.Find("Text").GetComponent<Text>().text = data.unitname;
                 }
                 Button b = button.GetComponent<Button>();
@@ -189,7 +188,7 @@ namespace DecisionMakingAI
 
             bool unitIsMine = unit.Owner == GameManager.instance.gamePlayersParameters.myPlayerId;
             
-            // Adapt content panel heights to match info to display
+            // Adapt content panel heights to match info on display
             int contentHeight = unitIsMine ? 60 + unit.Production.Count * 16 : 60;
             _selectedUnitContentRectTransform.sizeDelta = new Vector2(64, contentHeight);
             _selectedUnitButtonsRectTransform.anchoredPosition = new Vector2(0, -contentHeight - 20);
@@ -199,7 +198,7 @@ namespace DecisionMakingAI
             _selectedUnitTitleText.text = unit.Data.unitname;
             _selectedUnitLevelText.text = $"Level {unit.Level}";
             
-            // Clear resource production and reinstantiate new one
+            // Clear resource production and re-instantiate a new one
             foreach (Transform child in _selectedUnitResourcesProductionParent)
             {
                 Destroy(child.gameObject);
@@ -219,7 +218,7 @@ namespace DecisionMakingAI
                 }
             }
             
-            // Clear skills and reinstantiate new ones
+            // Clear skills and re-instantiate new ones
             foreach (Transform child in _selectedUnitActionButtonsParent)
             {
                 Destroy(child.gameObject);
@@ -319,7 +318,7 @@ namespace DecisionMakingAI
                 _infoPanelDescriptionText.text = data.description;
             }
             
-            // Clear resource costs and reinstantiate new ones
+            // Clear resource costs and re-instantiate new ones
             foreach (Transform child in _infoPanelResourcesCostParent)
             {
                 Destroy(child.gameObject);

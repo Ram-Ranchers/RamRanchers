@@ -87,6 +87,8 @@ namespace DecisionMakingAI
             return _data.CanBuy();
         }
 
+        // This checks if there are any rocks or trees near by a building and if so it will let it the building
+        // produce stone and wood
         public Dictionary<InGameResource, int> ComputeProduction()
         {
             if (_data.canProduce.Length == 0)

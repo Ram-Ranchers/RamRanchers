@@ -152,6 +152,7 @@ namespace DecisionMakingAI
             return Unit.Owner == GameManager.instance.gamePlayersParameters.myPlayerId;
         }
         
+        // This turns on the fov for the units which allows it to uncover the fog of war
         public void EnableFOV(float size)
         {
             fov.SetActive(true);
@@ -160,6 +161,7 @@ namespace DecisionMakingAI
             StartCoroutine(ScalingFOV(size));
         }
 
+        // Grows the fov to the right size when an object is instantiated  
         private IEnumerator ScalingFOV(float size)
         {
             float r = 0f, t = 0f, step = 0.02f;

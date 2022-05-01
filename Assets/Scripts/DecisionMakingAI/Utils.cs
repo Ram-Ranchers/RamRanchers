@@ -109,6 +109,7 @@ namespace DecisionMakingAI
             return retVal;
         }
 
+        // This is to assign the number keys to the keys on the keyboard for grouping units together 
         public static int GetAlphaKeyValue(string inputString)
         {
             if (inputString == "0")
