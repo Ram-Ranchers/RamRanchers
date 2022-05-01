@@ -34,7 +34,7 @@ namespace DecisionMakingAI
            float targetSize = Mathf.Max(s.x, s.z);
 
            float d = Vector3.Distance(_manager.transform.position, target.position);
-           bool isInRange = (d - targetSize) <= _attackRange;
+           bool isInRange = (d - targetSize) < _attackRange + 2;
            _state = isInRange ? NodeState.Success : NodeState.Failure;
            return _state;
        }

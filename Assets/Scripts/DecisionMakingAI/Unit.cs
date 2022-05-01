@@ -73,14 +73,12 @@ namespace DecisionMakingAI
         public virtual void Place()
         {
             _transform.GetComponent<BoxCollider>().isTrigger = false;
-            if (_owner == GameManager.instance.gamePlayersParameters.myPlayerId)
-            {
-                _transform.GetComponent<UnitManager>().EnableFOV(_fieldOfView);
 
-                foreach (ResourceValue resource in _data.cost)
-                {
-                    Globals.Game_Resources[resource.code].AddAmount(-resource.amount);
-                }
+            _transform.GetComponent<UnitManager>().EnableFOV(_fieldOfView);
+
+            foreach (ResourceValue resource in _data.cost)
+            {
+                Globals.Game_Resources[resource.code].AddAmount(-resource.amount);
             }
         }
 

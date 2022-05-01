@@ -34,7 +34,7 @@ namespace DecisionMakingAI
                     return um.Unit.Owner != _unitOwner;
                 });
 
-            if (enemiesInRange.Any())
+            if(enemiesInRange.Any())
             {
                 _parent.SetData("currentTarget",
                     enemiesInRange.OrderBy(x => (x.transform.position - _pos).sqrMagnitude).First().transform);

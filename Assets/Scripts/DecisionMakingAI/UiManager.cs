@@ -225,7 +225,7 @@ namespace DecisionMakingAI
                 Destroy(child.gameObject);
             }
 
-            if (unitIsMine && unit.SkillManagers.Count > 0)
+            if(unit.SkillManagers.Count > 0)
             {
                 GameObject g;
                 Transform t;

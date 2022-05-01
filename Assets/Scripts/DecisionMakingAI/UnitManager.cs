@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,7 +46,7 @@ namespace DecisionMakingAI
         
         private void OnMouseDown()
         {
-            if (IsActive() && IsMyUnit())
+            if (IsActive())
             {
                 Select(true, Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
             }
@@ -61,11 +60,6 @@ namespace DecisionMakingAI
         private void OnMouseExit()
         {
             _hoverd = false;
-        }
-
-        private bool IsMyUnit()
-        {
-            return Unit.Owner == GameManager.instance.gamePlayersParameters.myPlayerId;
         }
         
         private void SelectUtil()
@@ -153,6 +147,11 @@ namespace DecisionMakingAI
             Unit = unit;
         }
 
+        public bool IsUnitMine()
+        {
+            return Unit.Owner == GameManager.instance.gamePlayersParameters.myPlayerId;
+        }
+        
         public void EnableFOV(float size)
         {
             fov.SetActive(true);

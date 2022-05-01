@@ -21,4 +21,4 @@ MonoBehaviour:
   dayLengthInSeconds: 20
   dayInitialRatio: 0.2
   initialBuilding: {fileID: 11400000, guid: fa6270761f56b8a458f2a98fa7e70999, type: 2}
-  enableFOV: 0
+  enableFOV: 1

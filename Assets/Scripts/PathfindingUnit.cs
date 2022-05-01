@@ -63,7 +63,7 @@ public class PathfindingUnit : MonoBehaviour
 
         manager = GetComponent<UnitManager>();
 
-        if(manager.IsSelected)
+        if(manager.IsSelected && manager.IsUnitMine())
         {
             transform.LookAt(path.lookPoints[0]);
             while (followingPath)
