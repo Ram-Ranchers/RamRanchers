@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 7775004569972484547}
   - component: {fileID: 2114261807146548325}
   - component: {fileID: 3490801923602061222}
-  - component: {fileID: 1914784017926094024}
-  - component: {fileID: 3301044071978258910}
+  - component: {fileID: 187181566592751694}
   m_Layer: 0
   m_Name: Bird
   m_TagString: bird
@@ -29,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 3925854449387729986}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.6}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -84,20 +83,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1914784017926094024
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3925854449387729986}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3301044071978258910
+--- !u!114 &187181566592751694
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -106,13 +92,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3925854449387729986}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 202bdfbfcf073b0478a3764b1fec79ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 49b4cab3a91c2e8448719750820cbffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedMax: 1
-  alignVal: 1
-  separVal: 1
-  cohesVal: 1
-  alignRange: 2
-  separRange: 2
-  cohesRange: 2
+  velocity: {x: 0, y: 0, z: 0}

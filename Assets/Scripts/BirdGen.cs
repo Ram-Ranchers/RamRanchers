@@ -8,13 +8,14 @@ public class BirdGen : MonoBehaviour
     [SerializeField] private GameObject birdPref;
     [SerializeField] private int numBirds;
     [SerializeField] private float spawnDist;
+    public Vector3 spawnLanding;
     private GameObject[] birds;
     // Start is called before the first frame update
     void Start()
     {
         birds = new GameObject[numBirds];
         int spawnId = Random.Range(0, landings.Length);
-        Vector3 spawnLanding = landings[spawnId].transform.position;
+        spawnLanding = landings[spawnId].transform.position;
         Vector3 newBirdPos = spawnLanding;
         for (int i = 0; i < numBirds; i++)
         {
